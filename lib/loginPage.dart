@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -24,11 +25,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // @override
-  // void initState() {
-
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    super.initState();
+  }
 
   google() {
     print("Google");
@@ -383,8 +383,10 @@ class _LoginPageState extends State<LoginPage> {
                                                                   MainAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                const Icon(Icons
-                                                                    .g_mobiledata),
+                                                                Image.asset(
+                                                                  "./assets/google.png",
+                                                                  height: 25,
+                                                                ),
                                                                 const SizedBox(
                                                                   width: 30,
                                                                 ),

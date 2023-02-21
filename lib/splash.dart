@@ -11,8 +11,9 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  _navigatetologin() async {
+  _navigate() async {
     await Future.delayed(const Duration(seconds: 1), () {});
+
     // if(getStorage == login ) then home page else
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
@@ -21,7 +22,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    _navigatetologin();
+    _navigate();
   }
 
   @override
@@ -41,7 +42,7 @@ class _SplashState extends State<Splash> {
           ),
           child: Center(
               child: Image.asset(
-            "./assets/logo.png",
+            "./assets/splash.png",
           ))),
     );
   }
