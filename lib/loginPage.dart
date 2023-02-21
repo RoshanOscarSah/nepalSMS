@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -27,6 +28,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   
    Future<void> signInGoogle()async{
     final GoogleSignInAccount? googleUser=await GoogleSignIn().signIn();
@@ -59,11 +61,8 @@ else {
 
 
   }
-  // @override
-  // void initState() {
+  
 
-  //   super.initState();
-  // }
 
   google() {
     print("Google");
@@ -420,8 +419,10 @@ else {
                                                                   MainAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                const Icon(Icons
-                                                                    .g_mobiledata),
+                                                                Image.asset(
+                                                                  "./assets/google.png",
+                                                                  height: 25,
+                                                                ),
                                                                 const SizedBox(
                                                                   width: 30,
                                                                 ),

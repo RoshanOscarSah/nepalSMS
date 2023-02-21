@@ -14,8 +14,10 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  _navigatetologin() async {
+
+  _navigate() async {
     if ( FirebaseAuth.instance.currentUser != null) {
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
 } else {
@@ -28,7 +30,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    _navigatetologin();
+    _navigate();
   }
 
   @override
@@ -48,7 +50,7 @@ class _SplashState extends State<Splash> {
           ),
           child: Center(
               child: Image.asset(
-            "./assets/logo.png",
+            "./assets/splash.png",
           ))),
     );
   }
