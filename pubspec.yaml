@@ -41,6 +41,11 @@ dependencies:
   loading_animation_widget: ^1.2.0+2
   connectivity_plus: ^3.0.3
   get: ^4.6.5
+  firebase_core: ^2.6.1
+  firebase_auth: ^4.2.8
+  google_sign_in: ^6.0.0
+  cloud_firestore: ^4.4.2
+  sign_in_with_apple: ^4.3.0
 
 
 dev_dependencies:

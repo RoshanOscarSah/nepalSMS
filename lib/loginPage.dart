@@ -1,13 +1,16 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, use_build_context_synchronously
 
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/getStorage.dart';
@@ -25,10 +28,41 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  @override
-  void initState() {
-    super.initState();
+
+  
+   Future<void> signInGoogle()async{
+    final GoogleSignInAccount? googleUser=await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth=await googleUser?.authentication;
+    final credential=GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken
+    );
+
+   var email = googleUser!.email;
+   var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+   if (methods.contains('google.com')) {
+       var userCredential= (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+      Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
+}
+else {
+     var userCredential= (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+     FirebaseFirestore.instance.collection("users").doc(userCredential!.uid).set({
+    "id":userCredential!.uid,
+    "name":userCredential!.email,
+    "credit":1,
+    "created_on":DateTime.now(),
+    });
+          Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
+
+}
+
+
+
   }
+  
+
 
   google() {
     print("Google");
@@ -330,7 +364,9 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                             InkWell(
                                               onTap: () {
-                                                google();
+                                               signInGoogle().then((value) {
+                                                print("Sign In Vayo");
+                                               });
                                               },
                                               child: Padding(
                                                   padding: const EdgeInsets

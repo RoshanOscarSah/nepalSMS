@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nepal_sms/loginPage.dart';
 
@@ -11,13 +14,18 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  _navigate() async {
-    await Future.delayed(const Duration(seconds: 1), () {});
 
-    // if(getStorage == login ) then home page else
+  _navigate() async {
+    if ( FirebaseAuth.instance.currentUser != null) {
+
     Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const HomePage()));
+} else {
+  Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
+
+}
 
   @override
   void initState() {
