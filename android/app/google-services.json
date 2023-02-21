@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "195266374056",
+    "project_id": "nepalsms-43400",
+    "storage_bucket": "nepalsms-43400.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:195266374056:android:a7d942391eec5b5493159d",
+        "android_client_info": {
+          "package_name": "com.example.mysparrowsms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "195266374056-ba2h39n27limd865bk6srcpv42s1joos.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPeRmT5kac7MyZuqhO2lpqk2cx7XiyAl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "195266374056-ba2h39n27limd865bk6srcpv42s1joos.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
