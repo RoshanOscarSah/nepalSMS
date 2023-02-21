@@ -8,7 +8,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:mysparrowsms/getStorage.dart';
+import 'package:nepal_sms/getStorage.dart';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
@@ -778,11 +778,114 @@ class _HomePageState extends State<HomePage> {
                 });
               },
               icon: const Icon(
-                Icons.api,
+                Icons.person_sharp,
                 color: Color(0xFFFFECAF),
               ),
             ),
-          )
+          ),
+          Positioned(
+            right: 80,
+            top: 50,
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        content: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.white.withOpacity(0.8),
+                                Colors.white.withOpacity(0.7),
+                              ],
+                              begin: AlignmentDirectional.topStart,
+                              end: AlignmentDirectional.bottomEnd,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(
+                              width: 1.5,
+                              color: Colors.white.withOpacity(0.8),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                      "Add Custom API KEY provided by sparrow sms",
+                                      textAlign: TextAlign.left,
+                                      style: GoogleFonts.comfortaa(
+                                        textStyle: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w900,
+                                            color:
+                                                Color.fromARGB(255, 37, 0, 0)),
+                                      )),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  controller: apiController,
+                                  textAlign: TextAlign.start,
+                                  style: GoogleFonts.comfortaa(
+                                    textStyle: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w900,
+                                        color: Color.fromARGB(255, 37, 0, 0)),
+                                  ),
+                                  decoration: InputDecoration(
+                                    enabledBorder: const UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black),
+                                    ),
+                                    focusedBorder: const UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    fillColor: Colors.black,
+                                    hintText: "Token",
+                                    hintStyle: GoogleFonts.comfortaa(
+                                        textStyle: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.5))),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 19,
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      GetStorage()
+                                          .write('API', apiController.text);
+
+                                      setState(() {});
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(Icons.done_rounded))
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).then((value) {
+                  apiController.clear();
+                  setState(() {});
+                });
+              },
+              icon: const Icon(
+                Icons.history,
+                color: Color(0xFFFFECAF),
+              ),
+            ),
+          ),
         ],
       ),
     );

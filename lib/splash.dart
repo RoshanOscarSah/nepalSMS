@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nepal_sms/loginPage.dart';
 
 import 'homePage.dart';
 
@@ -12,9 +13,9 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   _navigatetologin() async {
     await Future.delayed(const Duration(seconds: 1), () {});
-
+    // if(getStorage == login ) then home page else
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
+        context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
   @override
