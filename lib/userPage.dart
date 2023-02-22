@@ -2,6 +2,8 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/loginPage.dart';
 
 import 'helper.dart';
+import 'history_model.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -173,7 +176,10 @@ class _UserPageState extends State<UserPage> {
                                                         .withOpacity(0.7),
                                                     size: 30,
                                                   )
-                                                : Text("your@email.com",
+                                                : Text(
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.email
+                                                        .toString(),
                                                     textAlign: TextAlign.left,
                                                     style:
                                                         GoogleFonts.comfortaa(
@@ -195,6 +201,8 @@ class _UserPageState extends State<UserPage> {
                                             ),
                                             IconButton(
                                                 onPressed: () {
+                                                  FirebaseAuth.instance
+                                                      .signOut();
                                                   print("logout");
                                                   Get.snackbar("Logout",
                                                       "Logout Successfully");
@@ -310,9 +318,58 @@ class _UserPageState extends State<UserPage> {
                                                     .width -
                                                 50,
                                             child: ListView(
+                                              physics:BouncingScrollPhysics(),
                                               padding: EdgeInsets.zero,
                                               children: [
-                                                Padding(
+                                               StreamBuilder<
+                                                          QuerySnapshot>(
+                                                        stream:
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'history')
+                                                                .snapshots(),
+                                                        builder: (ctx,
+                                                            streamSnapshot) {
+                                                          if (streamSnapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return Center(
+                                                                child: LoadingAnimationWidget
+                                                                    .hexagonDots(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                              size: 30,
+                                                            ));
+                                                          }
+                                                          final _blogs =
+                                                              streamSnapshot
+                                                                      .data
+                                                                      ?.docs
+                                                                  as List;
+                                                          return ListView
+                                                              .builder(
+                                                                physics: BouncingScrollPhysics(),
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            shrinkWrap: true,
+                                                           
+                                                            itemCount:
+                                                                _blogs.length,
+                                                            itemBuilder:
+                                                                (ctx, index) {
+                                                              final HistoryModel
+                                                                  _userData =
+                                                                  HistoryModel.fromJson(Map<
+                                                                      String,
+                                                                      dynamic>.from(_blogs[
+                                                                          index]
+                                                                      .data()));
+                                                      
+                                                              return  Padding(
                                                   padding: const EdgeInsets
                                                           .symmetric(
                                                       horizontal: 20,
@@ -348,535 +405,69 @@ class _UserPageState extends State<UserPage> {
                                                               .withOpacity(0.5),
                                                         ),
                                                       ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(Icons
-                                                                    .phone),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(
-                                                                    "9801149729",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: GoogleFonts
-                                                                        .comfortaa(
-                                                                      textStyle: const TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color: Color.fromARGB(
-                                                                              255,
-                                                                              37,
-                                                                              0,
-                                                                              0)),
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(
-                                                                    Icons.sms),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                      "Ram Sah(ramsah999@gmail.com)\nHi. i need help call me",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: GoogleFonts
-                                                                          .comfortaa(
-                                                                        textStyle: const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            color: Color.fromARGB(
-                                                                                255,
-                                                                                37,
-                                                                                0,
-                                                                                0)),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
+                                                      child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            const Icon(Icons.phone),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text(_userData.phone.toString(),
+                                                                                textAlign: TextAlign.left,
+                                                                                style: GoogleFonts.comfortaa(
+                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            const Icon(Icons.sms),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Text("${_userData.from.toString()}(${FirebaseAuth.instance.currentUser!.email})\n${_userData.message.toString()}",
+                                                                                  textAlign: TextAlign.left,
+                                                                                  style: GoogleFonts.comfortaa(
+                                                                                    textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                  )),
+                                                                            ),
+                                                                          ],
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 5),
-                                                  child: Container(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                          colors: [
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.2),
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.4),
-                                                          ],
-                                                          begin:
-                                                              AlignmentDirectional
-                                                                  .topStart,
-                                                          end:
-                                                              AlignmentDirectional
-                                                                  .bottomEnd,
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: Border.all(
-                                                          width: 1.5,
-                                                          color: Colors.white
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(Icons
-                                                                    .phone),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(
-                                                                    "9801149729",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: GoogleFonts
-                                                                        .comfortaa(
-                                                                      textStyle: const TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color: Color.fromARGB(
-                                                                              255,
-                                                                              37,
-                                                                              0,
-                                                                              0)),
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(
-                                                                    Icons.sms),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                      "Ram Sah(ramsah999@gmail.com)\nHi. i need help call me",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: GoogleFonts
-                                                                          .comfortaa(
-                                                                        textStyle: const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            color: Color.fromARGB(
-                                                                                255,
-                                                                                37,
-                                                                                0,
-                                                                                0)),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 5),
-                                                  child: Container(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                          colors: [
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.2),
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.4),
-                                                          ],
-                                                          begin:
-                                                              AlignmentDirectional
-                                                                  .topStart,
-                                                          end:
-                                                              AlignmentDirectional
-                                                                  .bottomEnd,
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: Border.all(
-                                                          width: 1.5,
-                                                          color: Colors.white
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(Icons
-                                                                    .phone),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(
-                                                                    "9801149729",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: GoogleFonts
-                                                                        .comfortaa(
-                                                                      textStyle: const TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color: Color.fromARGB(
-                                                                              255,
-                                                                              37,
-                                                                              0,
-                                                                              0)),
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(
-                                                                    Icons.sms),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                      "Ram Sah(ramsah999@gmail.com)\nHi. i need help call me",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: GoogleFonts
-                                                                          .comfortaa(
-                                                                        textStyle: const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            color: Color.fromARGB(
-                                                                                255,
-                                                                                37,
-                                                                                0,
-                                                                                0)),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 5),
-                                                  child: Container(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                          colors: [
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.2),
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.4),
-                                                          ],
-                                                          begin:
-                                                              AlignmentDirectional
-                                                                  .topStart,
-                                                          end:
-                                                              AlignmentDirectional
-                                                                  .bottomEnd,
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: Border.all(
-                                                          width: 1.5,
-                                                          color: Colors.white
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(Icons
-                                                                    .phone),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(
-                                                                    "9801149729",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: GoogleFonts
-                                                                        .comfortaa(
-                                                                      textStyle: const TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color: Color.fromARGB(
-                                                                              255,
-                                                                              37,
-                                                                              0,
-                                                                              0)),
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(
-                                                                    Icons.sms),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                      "Ram Sah(ramsah999@gmail.com)\nHi. i need help call me",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: GoogleFonts
-                                                                          .comfortaa(
-                                                                        textStyle: const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            color: Color.fromARGB(
-                                                                                255,
-                                                                                37,
-                                                                                0,
-                                                                                0)),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 5),
-                                                  child: Container(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                          colors: [
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.2),
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.4),
-                                                          ],
-                                                          begin:
-                                                              AlignmentDirectional
-                                                                  .topStart,
-                                                          end:
-                                                              AlignmentDirectional
-                                                                  .bottomEnd,
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: Border.all(
-                                                          width: 1.5,
-                                                          color: Colors.white
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(Icons
-                                                                    .phone),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(
-                                                                    "9801149729",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style: GoogleFonts
-                                                                        .comfortaa(
-                                                                      textStyle: const TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color: Color.fromARGB(
-                                                                              255,
-                                                                              37,
-                                                                              0,
-                                                                              0)),
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                const Icon(
-                                                                    Icons.sms),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(
-                                                                      "Ram Sah(ramsah999@gmail.com)\nHi. i need help call me",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: GoogleFonts
-                                                                          .comfortaa(
-                                                                        textStyle: const TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            fontWeight: FontWeight
-                                                                                .bold,
-                                                                            color: Color.fromARGB(
-                                                                                255,
-                                                                                37,
-                                                                                0,
-                                                                                0)),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
+                                                );
+                                                            },
+                                                          );
+                                                        },
+                                                      )
+                                              
                                               ],
                                             )),
                                       ),

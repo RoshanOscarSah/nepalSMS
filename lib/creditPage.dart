@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ import 'package:nepal_sms/loginPage.dart';
 import 'package:nepal_sms/swippableBox.dart';
 import 'dart:io' show Platform;
 
+import 'firebaseModel.dart';
 import 'helper.dart';
 
 class CreditPage extends StatefulWidget {
@@ -176,35 +178,87 @@ class _CreditPageState extends State<CreditPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          isLoading
-                                              ? LoadingAnimationWidget
-                                                  .hexagonDots(
-                                                  color: Colors.black
-                                                      .withOpacity(0.7),
-                                                  size: 30,
-                                                )
-                                              : Text("1 SMS",
-                                                  textAlign: TextAlign.left,
-                                                  style: GoogleFonts.comfortaa(
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: Color.fromARGB(
-                                                            255, 37, 0, 0)),
-                                                  )),
-                                          const SizedBox(
-                                            width: 10,
+                                          Container(
+                                            height: 50,
+                                            width: 120,
+                                            child: StreamBuilder<QuerySnapshot>(
+                                                                                stream: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .snapshots(),
+                                                                                builder: (ctx, streamSnapshot) {
+                                                                                  if (streamSnapshot
+                                                  .connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                                                                  }
+                                                                                  final _blogs = streamSnapshot
+                                              .data?.docs as List;
+                                                                                  return ListView.builder(padding: EdgeInsets.zero,
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: 1,
+                                            itemBuilder: (ctx, index) {
+                                              final UserModel _userData =
+                                                  UserModel.fromJson(Map<
+                                                          String,
+                                                          dynamic>.from(
+                                                      _blogs[index]
+                                                          .data()));
+                                                                              
+                                              return Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                      "${_userData.credit} SMS",
+                                                      textAlign:
+                                                          TextAlign.left,
+                                                      style: GoogleFonts
+                                                          .comfortaa(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontSize:
+                                                                    12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w900,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        37,
+                                                                        0,
+                                                                        0)),
+                                                      )),
+                                                       const SizedBox(
+                                              width: 10,
+                                            ),
+                                            IconButton(
+                                                onPressed: () {
+                                                  print("nothing");
+                                                },
+                                                icon: Icon(
+                                                  Icons.card_giftcard_rounded,
+                                                  color: Color.fromARGB(
+                                                      255, 255, 154, 13),
+                                                )),
+                                                ],
+                                              );
+                                            },
+                                                                                  );
+                                                                                },
+                                                                              ),
                                           ),
-                                          IconButton(
-                                              onPressed: () {
-                                                print("nothing");
-                                              },
-                                              icon: Icon(
-                                                Icons.card_giftcard_rounded,
-                                                color: Color.fromARGB(
-                                                    255, 255, 154, 13),
-                                              )),
+
+
+
+
+
+
+                                         
                                         ],
                                       ),
                                     )))),
