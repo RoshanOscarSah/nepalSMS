@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,8 +18,10 @@ import 'package:nepal_sms/loginPage.dart';
 import 'package:nepal_sms/swippableBox.dart';
 import 'dart:io' show Platform;
 
-import 'firebaseModel.dart';
+import 'models/creditModels.dart';
+import 'models/firebaseModel.dart';
 import 'helper.dart';
+import 'models/purchasedModels.dart';
 
 class CreditPage extends StatefulWidget {
   int pageControllerR;
@@ -38,6 +41,36 @@ class _CreditPageState extends State<CreditPage> {
     _pageController = widget.pageControllerR == 0
         ? PageController(initialPage: 0, keepPage: true, viewportFraction: 1)
         : PageController(initialPage: 1, keepPage: true, viewportFraction: 1);
+  }
+  addCredit(int no)async{
+     await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((value)async {
+          await FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({"credit": value.data()!["credit"] +no}).then((value) {
+            print("Updated");
+          });
+      });
+  }
+
+  addHistory({required String no,required String price}){
+    FirebaseFirestore.instance.collection("userPurchaseHistory").doc().set({
+      "price":price,
+      "number":no,
+      "date":DateTime.now(),
+      "id":FirebaseAuth.instance.currentUser!.uid
+    }).then((value) {
+      Get.snackbar("Purchased",
+                                                      "$no sms purchased on ${price}");
+                                                      print(no);
+      addCredit(int.parse(no));
+    });
+
+
   }
 
   List<String> head = ["Find", "Request"];
@@ -182,83 +215,84 @@ class _CreditPageState extends State<CreditPage> {
                                             height: 50,
                                             width: 120,
                                             child: StreamBuilder<QuerySnapshot>(
-                                                                                stream: FirebaseFirestore.instance
-                                            .collection('users')
-                                            .snapshots(),
-                                                                                builder: (ctx, streamSnapshot) {
-                                                                                  if (streamSnapshot
-                                                  .connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
-                                                                                  }
-                                                                                  final _blogs = streamSnapshot
-                                              .data?.docs as List;
-                                                                                  return ListView.builder(padding: EdgeInsets.zero,
-                                            shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            itemCount: 1,
-                                            itemBuilder: (ctx, index) {
-                                              final UserModel _userData =
-                                                  UserModel.fromJson(Map<
-                                                          String,
-                                                          dynamic>.from(
-                                                      _blogs[index]
-                                                          .data()));
-                                                                              
-                                              return Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                      "${_userData.credit} SMS",
-                                                      textAlign:
-                                                          TextAlign.left,
-                                                      style: GoogleFonts
-                                                          .comfortaa(
-                                                        textStyle:
-                                                            const TextStyle(
-                                                                fontSize:
-                                                                    12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w900,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        37,
-                                                                        0,
-                                                                        0)),
-                                                      )),
-                                                       const SizedBox(
-                                              width: 10,
+                                              stream: FirebaseFirestore.instance
+                                                  .collection('users').where("id",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                                                  .snapshots(),
+                                              builder: (ctx, streamSnapshot) {
+                                                if (streamSnapshot
+                                                        .connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                                }
+                                                final _blogs = streamSnapshot
+                                                    .data?.docs??[]as List;
+                                                return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount: 1,
+                                                  itemBuilder: (ctx, index) {
+                                                    final UserModel _userData =
+                                                        UserModel.fromJson(Map<
+                                                                String,
+                                                                dynamic>.from(
+                                                            _blogs[index]
+                                                                .data()));
+
+                                                    return Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            "${_userData.credit} SMS",
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            style: GoogleFonts
+                                                                .comfortaa(
+                                                              textStyle: const TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w900,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          37,
+                                                                          0,
+                                                                          0)),
+                                                            )),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              print("nothing");
+                                                            },
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .card_giftcard_rounded,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      255,
+                                                                      154,
+                                                                      13),
+                                                            )),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
                                             ),
-                                            IconButton(
-                                                onPressed: () {
-                                                  print("nothing");
-                                                },
-                                                icon: Icon(
-                                                  Icons.card_giftcard_rounded,
-                                                  color: Color.fromARGB(
-                                                      255, 255, 154, 13),
-                                                )),
-                                                ],
-                                              );
-                                            },
-                                                                                  );
-                                                                                },
-                                                                              ),
                                           ),
-
-
-
-
-
-
-                                         
                                         ],
                                       ),
                                     )))),
@@ -439,7 +473,55 @@ class _CreditPageState extends State<CreditPage> {
                                                             padding:
                                                                 EdgeInsets.zero,
                                                             children: [
-                                                              Padding(
+                                                               StreamBuilder<
+                                                          QuerySnapshot>(
+                                                        stream:
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'creditPrice')
+                                                                .snapshots(),
+                                                        builder: (ctx,
+                                                            streamSnapshot) {
+                                                          if (streamSnapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return Center(
+                                                                child: LoadingAnimationWidget
+                                                                    .hexagonDots(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                              size: 30,
+                                                            ));
+                                                          }
+                                                          final _blogs =
+                                                              streamSnapshot
+                                                                      .data
+                                                                      ?.docs
+                                                                  as List;
+                                                          return ListView
+                                                              .builder(
+                                                                physics: BouncingScrollPhysics(),
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            shrinkWrap: true,
+                                                           
+                                                            itemCount:
+                                                                _blogs.length,
+                                                            itemBuilder:
+                                                                (ctx, index) {
+                                                              final CreditModels
+                                                                  _userData =
+                                                                  CreditModels.fromJson(Map<
+                                                                      String,
+                                                                      dynamic>.from(_blogs[
+                                                                          index]
+                                                                      .data()));
+                                                      
+                                                              return  Padding(
                                                                 padding: const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
@@ -498,7 +580,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                             const SizedBox(
                                                                               width: 10,
                                                                             ),
-                                                                            Text("50 SMS",
+                                                                            Text(_userData.no_of_sms.toString()+" SMS",
                                                                                 textAlign: TextAlign.left,
                                                                                 style: GoogleFonts.comfortaa(
                                                                                   textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
@@ -511,10 +593,11 @@ class _CreditPageState extends State<CreditPage> {
                                                                           children: [
                                                                             InkWell(
                                                                               onTap: () {
+                                                                                addHistory(price:_userData.price,no:_userData.no_of_sms);
                                                                                 if (Platform.isAndroid) {
-                                                                                  Get.snackbar("Purchase", "android");
+                                                                                  /* Get.snackbar("Purchase", "android"); */
                                                                                 } else if (Platform.isIOS) {
-                                                                                  Get.snackbar("Purchase", "ios");
+                                                                                 /*  Get.snackbar("Purchase", "ios"); */
                                                                                 } else {
                                                                                   Get.snackbar("Not available for this platfrom", "Please purchase from ios and android");
                                                                                 }
@@ -537,7 +620,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                                 ),
                                                                                 child: Padding(
                                                                                   padding: const EdgeInsets.all(8.0),
-                                                                                  child: Text("\$ 1   PURCHASE",
+                                                                                  child: Text("${_userData.price}  PURCHASE",
                                                                                       textAlign: TextAlign.left,
                                                                                       style: GoogleFonts.comfortaa(
                                                                                         textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white),
@@ -553,8 +636,17 @@ class _CreditPageState extends State<CreditPage> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Padding(
+                                                              ); 
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+
+
+
+
+                                                             
+                                                              /* Padding(
                                                                 padding: const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
@@ -783,7 +875,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
+                                                              ), */
                                                             ],
                                                           ),
                                                           //history
@@ -791,210 +883,36 @@ class _CreditPageState extends State<CreditPage> {
                                                             padding:
                                                                 EdgeInsets.zero,
                                                             children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        20,
-                                                                    vertical:
-                                                                        5),
-                                                                child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    gradient:
-                                                                        LinearGradient(
-                                                                      colors: [
-                                                                        Colors
-                                                                            .white
-                                                                            .withOpacity(0.2),
-                                                                        Colors
-                                                                            .white
-                                                                            .withOpacity(0.4),
-                                                                      ],
-                                                                      begin: AlignmentDirectional
-                                                                          .topStart,
-                                                                      end: AlignmentDirectional
-                                                                          .bottomEnd,
-                                                                    ),
-                                                                    borderRadius: const BorderRadius
-                                                                            .all(
-                                                                        Radius.circular(
-                                                                            10)),
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      width:
-                                                                          1.5,
-                                                                      color: Colors
-                                                                          .white
-                                                                          .withOpacity(
-                                                                              0.5),
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceAround,
-                                                                      children: [
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.sms),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text("50 SMS",
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.attach_money_rounded),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text("1",
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.calendar_month_sharp),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text("31/11/2022",
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        20,
-                                                                    vertical:
-                                                                        5),
-                                                                child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    gradient:
-                                                                        LinearGradient(
-                                                                      colors: [
-                                                                        Colors
-                                                                            .white
-                                                                            .withOpacity(0.2),
-                                                                        Colors
-                                                                            .white
-                                                                            .withOpacity(0.4),
-                                                                      ],
-                                                                      begin: AlignmentDirectional
-                                                                          .topStart,
-                                                                      end: AlignmentDirectional
-                                                                          .bottomEnd,
-                                                                    ),
-                                                                    borderRadius: const BorderRadius
-                                                                            .all(
-                                                                        Radius.circular(
-                                                                            10)),
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      width:
-                                                                          1.5,
-                                                                      color: Colors
-                                                                          .white
-                                                                          .withOpacity(
-                                                                              0.5),
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceAround,
-                                                                      children: [
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.sms),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text("50 SMS",
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.attach_money_rounded),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text("1",
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.calendar_month_sharp),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text("31/11/2022",
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              //no purchase
-                                                              Padding(
+                                                               StreamBuilder<
+                                                          QuerySnapshot>(
+                                                        stream:
+                                                            FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'userPurchaseHistory')
+                                                                .snapshots(),
+                                                        builder: (ctx,
+                                                            streamSnapshot) {
+                                                          if (streamSnapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return Center(
+                                                                child: LoadingAnimationWidget
+                                                                    .hexagonDots(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                              size: 30,
+                                                            ));
+                                                          }
+                                                          final _blogs =
+                                                              streamSnapshot
+                                                                      .data
+                                                                      ?.docs
+                                                                  as List;
+                                                          return _blogs.length<1?Padding(
                                                                 padding: const EdgeInsets
                                                                         .symmetric(
                                                                     horizontal:
@@ -1053,7 +971,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                             const SizedBox(
                                                                               height: 10,
                                                                             ),
-                                                                            Text("No Purchase Yet",
+                                                                            Text("Not Purchased Yet",
                                                                                 textAlign: TextAlign.left,
                                                                                 style: GoogleFonts.comfortaa(
                                                                                   textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
@@ -1064,7 +982,135 @@ class _CreditPageState extends State<CreditPage> {
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
+                                                              ): ListView
+                                                              .builder(
+                                                                physics: BouncingScrollPhysics(),
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            shrinkWrap: true,
+                                                           
+                                                            itemCount:
+                                                                _blogs.length,
+                                                            itemBuilder:
+                                                                (ctx, index) {
+                                                              final PurchasedModels
+                                                                  _userData =
+                                                                  PurchasedModels.fromJson(Map<
+                                                                      String,
+                                                                      dynamic>.from(_blogs[
+                                                                          index]
+                                                                      .data()));
+                                                      
+                                                              return  Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        20,
+                                                                    vertical:
+                                                                        5),
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    gradient:
+                                                                        LinearGradient(
+                                                                      colors: [
+                                                                        Colors
+                                                                            .white
+                                                                            .withOpacity(0.2),
+                                                                        Colors
+                                                                            .white
+                                                                            .withOpacity(0.4),
+                                                                      ],
+                                                                      begin: AlignmentDirectional
+                                                                          .topStart,
+                                                                      end: AlignmentDirectional
+                                                                          .bottomEnd,
+                                                                    ),
+                                                                    borderRadius: const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      width:
+                                                                          1.5,
+                                                                      color: Colors
+                                                                          .white
+                                                                          .withOpacity(
+                                                                              0.5),
+                                                                    ),
+                                                                  ),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceAround,
+                                                                      children: [
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            const Icon(Icons.sms),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text("${_userData.number} SMS",
+                                                                                textAlign: TextAlign.left,
+                                                                                style: GoogleFonts.comfortaa(
+                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            const Icon(Icons.attach_money_rounded),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text(_userData.price.split("\$").last,
+                                                                                textAlign: TextAlign.left,
+                                                                                style: GoogleFonts.comfortaa(
+                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.start,
+                                                                          children: [
+                                                                            const Icon(Icons.calendar_month_sharp),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text(_userData.date.toDate().year.toString()+"/"+_userData.date.toDate().month.toString()+"/"+_userData.date.toDate().day.toString(),
+                                                                                textAlign: TextAlign.left,
+                                                                                style: GoogleFonts.comfortaa(
+                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+
+
+                                                              
+                                                           
+                                                              
                                                             ],
                                                           ),
                                                         ])),
