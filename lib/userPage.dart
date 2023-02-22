@@ -17,7 +17,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/loginPage.dart';
 
 import 'helper.dart';
-import 'history_model.dart';
+import 'models/history_model.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -327,7 +327,7 @@ class _UserPageState extends State<UserPage> {
                                                             FirebaseFirestore
                                                                 .instance
                                                                 .collection(
-                                                                    'history')
+                                                                    'history').where("userId",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                                                                 .snapshots(),
                                                         builder: (ctx,
                                                             streamSnapshot) {

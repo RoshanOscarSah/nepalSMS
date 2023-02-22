@@ -17,7 +17,7 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/userPage.dart';
 
-import 'firebaseModel.dart';
+import 'models/firebaseModel.dart';
 import 'helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -254,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                                     width: 150,
                                     child: StreamBuilder<QuerySnapshot>(
                                       stream: FirebaseFirestore.instance
-                                          .collection('users')
+                                          .collection('users').where("id",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                                           .snapshots(),
                                       builder: (ctx, streamSnapshot) {
                                         if (streamSnapshot.connectionState ==
@@ -754,7 +754,7 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(
                 Icons.person_sharp,
-                color: Color(0xFFFFECAF),
+                color: Color.fromARGB(255, 255, 154,13),
               ),
             ),
           ),
