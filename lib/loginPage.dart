@@ -17,6 +17,7 @@ import 'package:nepal_sms/getStorage.dart';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/homePage.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'helper.dart';
 
@@ -28,41 +29,37 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Future<void> signInGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
-  
-   Future<void> signInGoogle()async{
-    final GoogleSignInAccount? googleUser=await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth=await googleUser?.authentication;
-    final credential=GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken
-    );
-
-   var email = googleUser!.email;
-   var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-   if (methods.contains('google.com')) {
-       var userCredential= (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+    var email = googleUser!.email;
+    var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    if (methods.contains('google.com')) {
+      var userCredential =
+          (await FirebaseAuth.instance.signInWithCredential(credential)).user;
       Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
-}
-else {
-     var userCredential= (await FirebaseAuth.instance.signInWithCredential(credential)).user;
-     FirebaseFirestore.instance.collection("users").doc(userCredential!.uid).set({
-    "id":userCredential!.uid,
-    "name":userCredential!.email,
-    "credit":1,
-    "created_on":DateTime.now(),
-    });
-          Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
-
-}
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    } else {
+      var userCredential =
+          (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential!.uid)
+          .set({
+        "id": userCredential!.uid,
+        "name": userCredential!.email,
+        "credit": 1,
+        "created_on": DateTime.now(),
+      });
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    }
 //test
-
-
   }
-  
-
 
   google() {
     print("Google");
@@ -72,8 +69,8 @@ else {
 
   apple() {
     print("apple");
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const HomePage()));
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => const HomePage()));
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -274,99 +271,126 @@ else {
                                       child: Center(
                                         child: Column(
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 40,
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                apple();
-                                              },
-                                              child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 40,
-                                                      vertical: 0),
-                                                  child: ClipRRect(
-                                                      child: BackdropFilter(
-                                                          filter:
-                                                              ImageFilter.blur(
-                                                                  sigmaX: 15,
-                                                                  sigmaY: 20),
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              gradient:
-                                                                  LinearGradient(
-                                                                colors: [
-                                                                  Colors.white
-                                                                      .withOpacity(
-                                                                          0.8),
-                                                                  Colors.white
-                                                                      .withOpacity(
-                                                                          0.7),
-                                                                ],
-                                                                begin:
-                                                                    AlignmentDirectional
-                                                                        .topStart,
-                                                                end: AlignmentDirectional
-                                                                    .bottomEnd,
-                                                              ),
-                                                              borderRadius:
-                                                                  const BorderRadius
-                                                                          .all(
-                                                                      Radius.circular(
-                                                                          10)),
-                                                              border:
-                                                                  Border.all(
-                                                                width: 1.5,
-                                                                color: Colors
-                                                                    .white
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                              ),
-                                                            ),
-                                                            height: 50,
-                                                            width: 250,
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                const Icon(Icons
-                                                                    .apple),
-                                                                const SizedBox(
-                                                                  width: 30,
-                                                                ),
-                                                                Center(
-                                                                  child: isLoading
-                                                                      ? LoadingAnimationWidget.hexagonDots(
-                                                                          color: Colors
-                                                                              .black
-                                                                              .withOpacity(0.7),
-                                                                          size:
-                                                                              30,
-                                                                        )
-                                                                      : Text("Apple  ",
-                                                                          textAlign: TextAlign.left,
-                                                                          style: GoogleFonts.comfortaa(
-                                                                            textStyle: const TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.w900,
-                                                                                color: Color.fromARGB(255, 37, 0, 0)),
-                                                                          )),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          )))),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 65,
+                                                      vertical: 10),
+                                              child: SignInWithAppleButton(
+                                                onPressed: () async {
+                                                  final credential =
+                                                      await SignInWithApple
+                                                          .getAppleIDCredential(
+                                                    scopes: [
+                                                      AppleIDAuthorizationScopes
+                                                          .email,
+                                                      AppleIDAuthorizationScopes
+                                                          .fullName,
+                                                    ],
+                                                  );
+                                                  
+
+                                                  print(credential);
+                                                  // callback https://nepalsms-43400.firebaseapp.com/__/auth/handler
+
+                                                  // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                                                  // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                                                },
+                                              ),
                                             ),
+                                            // InkWell(
+                                            //   onTap: () {
+                                            //     apple();
+                                            //   },
+                                            //   child: Padding(
+                                            //       padding: const EdgeInsets
+                                            //               .symmetric(
+                                            //           horizontal: 40,
+                                            //           vertical: 0),
+                                            //       child: ClipRRect(
+                                            //           child: BackdropFilter(
+                                            //               filter:
+                                            //                   ImageFilter.blur(
+                                            //                       sigmaX: 15,
+                                            //                       sigmaY: 20),
+                                            //               child: Container(
+                                            //                 decoration:
+                                            //                     BoxDecoration(
+                                            //                   gradient:
+                                            //                       LinearGradient(
+                                            //                     colors: [
+                                            //                       Colors.white
+                                            //                           .withOpacity(
+                                            //                               0.8),
+                                            //                       Colors.white
+                                            //                           .withOpacity(
+                                            //                               0.7),
+                                            //                     ],
+                                            //                     begin:
+                                            //                         AlignmentDirectional
+                                            //                             .topStart,
+                                            //                     end: AlignmentDirectional
+                                            //                         .bottomEnd,
+                                            //                   ),
+                                            //                   borderRadius:
+                                            //                       const BorderRadius
+                                            //                               .all(
+                                            //                           Radius.circular(
+                                            //                               10)),
+                                            //                   border:
+                                            //                       Border.all(
+                                            //                     width: 1.5,
+                                            //                     color: Colors
+                                            //                         .white
+                                            //                         .withOpacity(
+                                            //                             0.5),
+                                            //                   ),
+                                            //                 ),
+                                            //                 height: 50,
+                                            //                 width: 250,
+                                            //                 child: Row(
+                                            //                   mainAxisAlignment:
+                                            //                       MainAxisAlignment
+                                            //                           .center,
+                                            //                   children: [
+                                            //                     const Icon(Icons
+                                            //                         .apple),
+                                            //                     const SizedBox(
+                                            //                       width: 30,
+                                            //                     ),
+                                            //                     Center(
+                                            //                       child: isLoading
+                                            //                           ? LoadingAnimationWidget.hexagonDots(
+                                            //                               color: Colors
+                                            //                                   .black
+                                            //                                   .withOpacity(0.7),
+                                            //                               size:
+                                            //                                   30,
+                                            //                             )
+                                            //                           : Text("Apple  ",
+                                            //                               textAlign: TextAlign.left,
+                                            //                               style: GoogleFonts.comfortaa(
+                                            //                                 textStyle: const TextStyle(
+                                            //                                     fontSize: 16,
+                                            //                                     fontWeight: FontWeight.w900,
+                                            //                                     color: Color.fromARGB(255, 37, 0, 0)),
+                                            //                               )),
+                                            //                     ),
+                                            //                   ],
+                                            //                 ),
+                                            //               )))),
+                                            // ),
                                             SizedBox(
                                               height: 20,
                                             ),
                                             InkWell(
                                               onTap: () {
-                                               signInGoogle().then((value) {
-                                                print("Sign In Vayo");
-                                               });
+                                                signInGoogle().then((value) {
+                                                  print("Sign In Vayo");
+                                                });
                                               },
                                               child: Padding(
                                                   padding: const EdgeInsets
@@ -412,7 +436,7 @@ else {
                                                                         0.5),
                                                               ),
                                                             ),
-                                                            height: 50,
+                                                            height: 45,
                                                             width: 250,
                                                             child: Row(
                                                               mainAxisAlignment:

@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "195266374056-rp76ajlo9g7rjg3ls5qsl4217u0l5huc.apps.googleusercontent.com",
+          "client_id": "195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.mysparrowsms",
-            "certificate_hash": "0207dd18ae0f99a18aed2eead457696ea883dead"
+            "certificate_hash": "3276531678f72d961bf5012ade65b019b0691cd8"
           }
         },
         {
