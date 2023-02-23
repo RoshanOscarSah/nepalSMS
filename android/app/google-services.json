@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "195266374056-ba2h39n27limd865bk6srcpv42s1joos.apps.googleusercontent.com",
+          "client_id": "195266374056-rp76ajlo9g7rjg3ls5qsl4217u0l5huc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mysparrowsms",
+            "certificate_hash": "0207dd18ae0f99a18aed2eead457696ea883dead"
+          }
+        },
+        {
+          "client_id": "195266374056-4ch6bm8tv82qvmq1en9bhv4ij7aighhp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "195266374056-ba2h39n27limd865bk6srcpv42s1joos.apps.googleusercontent.com",
+              "client_id": "195266374056-4ch6bm8tv82qvmq1en9bhv4ij7aighhp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "195266374056-qeaoqdao1j81oiem5r1gt7sbr18ma97s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.eachut.mysparrowsms"
+              }
             }
           ]
         }
