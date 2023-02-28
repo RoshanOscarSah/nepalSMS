@@ -318,45 +318,120 @@ class _UserPageState extends State<UserPage> {
                                                     .width -
                                                 50,
                                             child: ListView(
-                                              physics:BouncingScrollPhysics(),
+                                              physics: BouncingScrollPhysics(),
                                               padding: EdgeInsets.zero,
                                               children: [
-                                               StreamBuilder<
-                                                          QuerySnapshot>(
-                                                        stream:
-                                                            FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'history').where("userId",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                                                                .snapshots(),
-                                                        builder: (ctx,
-                                                            streamSnapshot) {
-                                                          if (streamSnapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .waiting) {
-                                                            return Center(
-                                                                child: LoadingAnimationWidget
-                                                                    .hexagonDots(
-                                                              color: Colors
-                                                                  .black
-                                                                  .withOpacity(
-                                                                      0.7),
-                                                              size: 30,
-                                                            ));
-                                                          }
-                                                          final _blogs =
-                                                              streamSnapshot
-                                                                      .data
-                                                                      ?.docs
-                                                                  as List;
-                                                          return ListView
-                                                              .builder(
-                                                                physics: BouncingScrollPhysics(),
+                                                StreamBuilder<QuerySnapshot>(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('history')
+                                                      .where("userId",
+                                                          isEqualTo:
+                                                              FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser!
+                                                                  .uid)
+                                                      .snapshots(),
+                                                  builder:
+                                                      (ctx, streamSnapshot) {
+                                                    if (streamSnapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Center(
+                                                          child:
+                                                              LoadingAnimationWidget
+                                                                  .hexagonDots(
+                                                        color: Colors.black
+                                                            .withOpacity(0.7),
+                                                        size: 30,
+                                                      ));
+                                                    }
+                                                    final _blogs =
+                                                        streamSnapshot
+                                                            .data?.docs as List;
+                                                    return _blogs.length < 1
+                                                        ? Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        20,
+                                                                    vertical:
+                                                                        20),
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                gradient:
+                                                                    LinearGradient(
+                                                                  colors: [
+                                                                    Colors.white
+                                                                        .withOpacity(
+                                                                            0.2),
+                                                                    Colors.white
+                                                                        .withOpacity(
+                                                                            0.4),
+                                                                  ],
+                                                                  begin: AlignmentDirectional
+                                                                      .topStart,
+                                                                  end: AlignmentDirectional
+                                                                      .bottomEnd,
+                                                                ),
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                            .all(
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                border:
+                                                                    Border.all(
+                                                                  width: 1.5,
+                                                                  color: Colors
+                                                                      .white
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                ),
+                                                              ),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        20.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceAround,
+                                                                  children: [
+                                                                    Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        const Icon(
+                                                                            Icons.sms),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            "No SMS history Yet",
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style: GoogleFonts.comfortaa(
+                                                                              textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                            )),
+                                                                      ],
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : ListView.builder(
+                                                            physics:
+                                                                BouncingScrollPhysics(),
                                                             padding:
                                                                 EdgeInsets.zero,
                                                             shrinkWrap: true,
-                                                           
                                                             itemCount:
                                                                 _blogs.length,
                                                             itemBuilder:
@@ -368,106 +443,108 @@ class _UserPageState extends State<UserPage> {
                                                                       dynamic>.from(_blogs[
                                                                           index]
                                                                       .data()));
-                                                      
-                                                              return  Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 5),
-                                                  child: Container(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        gradient:
-                                                            LinearGradient(
-                                                          colors: [
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.2),
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.4),
-                                                          ],
-                                                          begin:
-                                                              AlignmentDirectional
-                                                                  .topStart,
-                                                          end:
-                                                              AlignmentDirectional
-                                                                  .bottomEnd,
-                                                        ),
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                    .all(
-                                                                Radius.circular(
-                                                                    10)),
-                                                        border: Border.all(
-                                                          width: 1.5,
-                                                          color: Colors.white
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                      ),
-                                                      child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
+
+                                                              return Padding(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        20,
+                                                                    vertical:
+                                                                        5),
+                                                                child:
+                                                                    Container(
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      gradient:
+                                                                          LinearGradient(
+                                                                        colors: [
+                                                                          Colors
+                                                                              .white
+                                                                              .withOpacity(0.2),
+                                                                          Colors
+                                                                              .white
+                                                                              .withOpacity(0.4),
+                                                                        ],
+                                                                        begin: AlignmentDirectional
+                                                                            .topStart,
+                                                                        end: AlignmentDirectional
+                                                                            .bottomEnd,
+                                                                      ),
+                                                                      borderRadius: const BorderRadius
+                                                                              .all(
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                      border:
+                                                                          Border
+                                                                              .all(
+                                                                        width:
+                                                                            1.5,
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.5),
+                                                                      ),
+                                                                    ),
                                                                     child:
                                                                         Column(
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
-                                                                              .start,
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
                                                                       children: [
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.phone),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Text(_userData.phone.toString(),
-                                                                                textAlign: TextAlign.left,
-                                                                                style: GoogleFonts.comfortaa(
-                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                )),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            const Icon(Icons.sms),
-                                                                            const SizedBox(
-                                                                              width: 10,
-                                                                            ),
-                                                                            Expanded(
-                                                                              child: Text("${_userData.from.toString()}(${FirebaseAuth.instance.currentUser!.email})\n${_userData.message.toString()}",
-                                                                                  textAlign: TextAlign.left,
-                                                                                  style: GoogleFonts.comfortaa(
-                                                                                    textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                  )),
-                                                                            ),
-                                                                          ],
+                                                                        Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.start,
+                                                                            children: [
+                                                                              Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                children: [
+                                                                                  const Icon(Icons.phone),
+                                                                                  const SizedBox(
+                                                                                    width: 10,
+                                                                                  ),
+                                                                                  Text(_userData.phone.toString(),
+                                                                                      textAlign: TextAlign.left,
+                                                                                      style: GoogleFonts.comfortaa(
+                                                                                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                      )),
+                                                                                ],
+                                                                              ),
+                                                                              Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                children: [
+                                                                                  const Icon(Icons.sms),
+                                                                                  const SizedBox(
+                                                                                    width: 10,
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text("${_userData.from.toString()}(${FirebaseAuth.instance.currentUser!.email})\n${_userData.message.toString()}",
+                                                                                        textAlign: TextAlign.left,
+                                                                                        style: GoogleFonts.comfortaa(
+                                                                                          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                        )),
+                                                                                  ),
+                                                                                ],
+                                                                              )
+                                                                            ],
+                                                                          ),
                                                                         )
                                                                       ],
                                                                     ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                    ),
-                                                  ),
-                                                );
+                                                                  ),
+                                                                ),
+                                                              );
                                                             },
                                                           );
-                                                        },
-                                                      )
-                                              
+                                                  },
+                                                )
                                               ],
                                             )),
                                       ),
