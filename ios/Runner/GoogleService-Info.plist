@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>195266374056-qeaoqdao1j81oiem5r1gt7sbr18ma97s.apps.googleusercontent.com</string>
+	<string>195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.195266374056-qeaoqdao1j81oiem5r1gt7sbr18ma97s</string>
+	<string>com.googleusercontent.apps.195266374056-0obcp9jin9mia0bft0tam2g820f2m437</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDbxAIQHdpXHf-YnhuC_JpVjWJfLlfhOJI</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.eachut.mysparrowsms</string>
+	<string>com.eachut.nepalsms</string>
 	<key>PROJECT_ID</key>
 	<string>nepalsms-43400</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:195266374056:ios:05cdc614b7a89ac393159d</string>
+	<string>1:195266374056:ios:b721fd7b8174e26393159d</string>
 </dict>
 </plist>
