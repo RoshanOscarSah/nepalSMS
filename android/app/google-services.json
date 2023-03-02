@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:195266374056:android:a7d942391eec5b5493159d",
+        "mobilesdk_app_id": "1:195266374056:android:83d845a9f0e8406493159d",
         "android_client_info": {
-          "package_name": "com.example.mysparrowsms"
+          "package_name": "com.eachut.nepalsms"
         }
       },
       "oauth_client": [
         {
-          "client_id": "195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com",
+          "client_id": "195266374056-73spqdc5464grn8k990dt581ig5ohtil.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.mysparrowsms",
+            "package_name": "com.eachut.nepalsms",
             "certificate_hash": "3276531678f72d961bf5012ade65b019b0691cd8"
           }
         },
@@ -39,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "195266374056-qeaoqdao1j81oiem5r1gt7sbr18ma97s.apps.googleusercontent.com",
+              "client_id": "195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.eachut.mysparrowsms"
+                "bundle_id": "com.eachut.nepalsms"
               }
             }
           ]

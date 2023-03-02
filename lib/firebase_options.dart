@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAPeRmT5kac7MyZuqhO2lpqk2cx7XiyAl0',
-    appId: '1:195266374056:android:a7d942391eec5b5493159d',
+    appId: '1:195266374056:android:83d845a9f0e8406493159d',
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
@@ -63,20 +63,22 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDbxAIQHdpXHf-YnhuC_JpVjWJfLlfhOJI',
-    appId: '1:195266374056:ios:05cdc614b7a89ac393159d',
+    appId: '1:195266374056:ios:b721fd7b8174e26393159d',
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
-    iosClientId: '195266374056-qeaoqdao1j81oiem5r1gt7sbr18ma97s.apps.googleusercontent.com',
-    iosBundleId: 'com.eachut.mysparrowsms',
+    androidClientId: '195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com',
+    iosClientId: '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
+    iosBundleId: 'com.eachut.nepalsms',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDbxAIQHdpXHf-YnhuC_JpVjWJfLlfhOJI',
-    appId: '1:195266374056:ios:e2c037604db69d2193159d',
+    appId: '1:195266374056:ios:24cfae1ca1e9023a93159d',
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
+    androidClientId: '195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com',
     iosClientId: '195266374056-thsvv2b3km9pk88gk31nhsneuqu350ic.apps.googleusercontent.com',
     iosBundleId: 'com.example.mysparrowsms',
   );
