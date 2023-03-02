@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -289,29 +288,60 @@ class _LoginPageState extends State<LoginPage> {
                                                         WebAuthenticationOptions(
                                                       // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
                                                       clientId:
-                                                          'de.lunaone.flutter.signinwithappleexample.service',
+                                                          'com.eachut.nepalsms',
+                                                      // 'de.lunaone.flutter.signinwithappleexample.service',
 
-                                                      redirectUri:
-                                                          // For web your redirect URI needs to be the host of the "current page",
-                                                          // while for Android you will be using the API server that redirects back into your app via a deep link
-                                                          // kIsWeb
-                                                          //     ? Uri.parse('https://${window.location.host}/')
-                                                          //     :
-                                                          Uri.parse(
-                                                              // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
-                                                              'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
+                                                      redirectUri: Uri.parse(
+                                                          "intent://callback?https://nepalsms-43400.firebaseapp.com/__/auth/handler#Intent;package=com.eachut.nepalsms;scheme=signinwithapple;end"),
+                                                      // For web your redirect URI needs to be the host of the "current page",
+                                                      // while for Android you will be using the API server that redirects back into your app via a deep link
+                                                      // kIsWeb
+                                                      //     ? Uri.parse('https://${window.location.host}/')
+                                                      //     :
+                                                      // Uri.parse(
+                                                      //     // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
+                                                      //     'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
                                                     ),
                                                     // TODO: Remove these if you have no need for them
-                                                    nonce: 'example-nonce',
-                                                    state: 'example-state',
+                                                    // nonce: 'example-nonce',
+                                                    // state: 'example-state',
                                                   );
 
                                                   // ignore: avoid_print
                                                   print(credential);
+                                                  print(credential.state);
+
+                                                  print(credential.email);
+                                                  print(credential.familyName);
+                                                  print(credential.givenName);
+                                                  print(credential
+                                                      .authorizationCode);
+                                                  print(
+                                                      credential.identityToken);
+                                                  print(credential
+                                                      .userIdentifier);
+                                                  final oAuthProvider =
+                                                      OAuthProvider(
+                                                          'apple.com');
+
+                                                  var credentials =
+                                                      oAuthProvider.credential(
+                                                          idToken: credential
+                                                              .identityToken,
+                                                          accessToken: credential
+                                                              .authorizationCode);
+
+                                                  FirebaseAuth.instance
+                                                      .signInWithCredential(
+                                                          credentials)
+                                                      .then((value) {
+                                                    print("sign in vayo");
+                                                    Get.to(HomePage());
+                                                  });
 
                                                   // This is the endpoint that will convert an authorization code obtained
                                                   // via Sign in with Apple into a session in your system
-                                                  final signInWithAppleEndpoint =
+                                                  /* final signInWithAppleEndpoint =
                                                       Uri(
                                                     scheme: 'https',
                                                     host:
@@ -347,12 +377,11 @@ class _LoginPageState extends State<LoginPage> {
                                                   final session =
                                                       await http.Client().post(
                                                     signInWithAppleEndpoint,
-                                                  );
+                                                  ); */
 
                                                   // If we got this far, a session based on the Apple ID credential has been created in your system,
                                                   // and you can now set this as the app's session
                                                   // ignore: avoid_print
-                                                  print(session);
                                                 },
                                               ),
                                             ),
