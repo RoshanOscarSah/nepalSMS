@@ -291,15 +291,16 @@ class _LoginPageState extends State<LoginPage> {
                                                           'com.eachut.nepalsms',
                                                       // 'de.lunaone.flutter.signinwithappleexample.service',
 
-                                                      redirectUri:
-                                                          // For web your redirect URI needs to be the host of the "current page",
-                                                          // while for Android you will be using the API server that redirects back into your app via a deep link
-                                                          // kIsWeb
-                                                          //     ? Uri.parse('https://${window.location.host}/')
-                                                          //     :
-                                                          Uri.parse(
-                                                              // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
-                                                              'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
+                                                      redirectUri: Uri.parse(
+                                                          "intent://callback?https://nepalsms-43400.firebaseapp.com/__/auth/handler#Intent;package=com.eachut.nepalsms;scheme=signinwithapple;end"),
+                                                      // For web your redirect URI needs to be the host of the "current page",
+                                                      // while for Android you will be using the API server that redirects back into your app via a deep link
+                                                      // kIsWeb
+                                                      //     ? Uri.parse('https://${window.location.host}/')
+                                                      //     :
+                                                      // Uri.parse(
+                                                      //     // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
+                                                      //     'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
                                                     ),
                                                     // TODO: Remove these if you have no need for them
                                                     // nonce: 'example-nonce',
