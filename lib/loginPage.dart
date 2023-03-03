@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -293,11 +294,12 @@ class _LoginPageState extends State<LoginPage> {
 
                                                       redirectUri:
                                                           // "intent://callback?https://nepalsms-43400.firebaseapp.com/__/auth/handler#Intent;package=com.eachut.nepalsms;scheme=signinwithapple;end"),
-                                                          
+
                                                           // while for Android you will be using the API server that redirects back into your app via a deep link
-                                                           Uri.parse(
-                                                              // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
-                                                              'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
+                                                          Uri.parse(
+                                                              'https://vaulted-picturesque-alder.glitch.me/callbacks/sign_in_with_apple'),
+                                                      // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
+                                                      // 'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
                                                     ),
                                                     // TODO: Remove these if you have no need for them
                                                     // nonce: 'example-nonce',
@@ -338,11 +340,11 @@ class _LoginPageState extends State<LoginPage> {
 
                                                   // This is the endpoint that will convert an authorization code obtained
                                                   // via Sign in with Apple into a session in your system
-                                                  /* final signInWithAppleEndpoint =
+                                                  final signInWithAppleEndpoint =
                                                       Uri(
                                                     scheme: 'https',
                                                     host:
-                                                        'flutter-sign-in-with-apple-example.glitch.me',
+                                                        'vaulted-picturesque-alder.glitch.me',
                                                     path: '/sign_in_with_apple',
                                                     queryParameters: <String,
                                                         String>{
@@ -374,7 +376,9 @@ class _LoginPageState extends State<LoginPage> {
                                                   final session =
                                                       await http.Client().post(
                                                     signInWithAppleEndpoint,
-                                                  ); */
+                                                  );
+
+                                                  print(session);
 
                                                   // If we got this far, a session based on the Apple ID credential has been created in your system,
                                                   // and you can now set this as the app's session
