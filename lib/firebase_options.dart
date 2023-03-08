@@ -67,8 +67,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
-    androidClientId: '195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com',
-    iosClientId: '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
+    androidClientId:
+        '195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com',
+    iosClientId:
+        '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
     iosBundleId: 'com.eachut.nepalsms',
   );
 
@@ -78,8 +80,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
-    androidClientId: '195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com',
-    iosClientId: '195266374056-thsvv2b3km9pk88gk31nhsneuqu350ic.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mysparrowsms',
+    androidClientId:
+        '195266374056-ddgi45o2d2k8vno8cvpn343ik5lajccn.apps.googleusercontent.com',
+    iosClientId:
+        '195266374056-thsvv2b3km9pk88gk31nhsneuqu350ic.apps.googleusercontent.com',
+    iosBundleId: 'com.eachut.nepalsms',
   );
 }
