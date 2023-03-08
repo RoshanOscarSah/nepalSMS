@@ -46,7 +46,6 @@ dependencies:
   google_sign_in: ^6.0.0
   cloud_firestore: ^4.4.2
   sign_in_with_apple: ^4.3.0
-  lint: ^2.0.0
 
 
 dev_dependencies:
