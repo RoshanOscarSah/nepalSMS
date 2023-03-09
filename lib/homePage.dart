@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/userPage.dart';
 
+import 'loginPage.dart';
 import 'models/firebaseModel.dart';
 import 'helper.dart';
 
@@ -28,32 +29,85 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  checkUser() async {
+    var docRef = FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid);
+    try {
+      docRef.get().then((doc) {
+        if (doc.exists) {
+          print("available");
+        } else {
+          // doc.data() will be undefined in this case
+          FirebaseFirestore.instance
+              .collection("users")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .set({
+            "id": FirebaseAuth.instance.currentUser!.uid,
+            "name": FirebaseAuth.instance.currentUser!.email,
+            "credit": 1,
+            "created_on": DateTime.now(),
+          });
+        }
+      });
+    } catch (error) {
+      print(error);
+    }
 
-
-  creditCheck()async{
-     await FirebaseFirestore.instance
+    /*    if (FirebaseAuth.instance.currentUser != null) {
+      await FirebaseFirestore.instance
           .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get().then((value) {
-            if(value.data()!["credit"]>=1){
-                sendSms();
-            }else{
-              setState(() {
-                isLoading=false;
-              });
-              Get.snackbar("0 Credits", "Please Purchase Credits");
-            }
-            
-            });
+          .where("name", isEqualTo: FirebaseAuth.instance.currentUser!.email)
+          .get()
+          .then((value) async {
+        print(value.docs);
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+          "id": FirebaseAuth.instance.currentUser!.uid,
+          "name": FirebaseAuth.instance.currentUser!.email,
+          "credit": 1,
+          "created_on": DateTime.now(),
+        }); /* .then((value) {
+          Get.to(HomePage());
+        }); */
+      });
+      /*  WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      }); */
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginPage()));
+      });
+    } */
   }
 
-  
+  creditCheck() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      if (value.data()!["credit"] >= 1) {
+        sendSms();
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        Get.snackbar("0 Credits", "Please Purchase Credits");
+      }
+    });
+  }
+
   sendSms() async {
     final response = await http.get(
         // ignore: prefer_interpolation_to_compose_strings
         Uri.parse("https://cylinder.eachut.com/sendmessage/" +
             "v2_f5RKamGWtlI8w767gNp9Xk2OKK8.5NuE/" +
-            "${fromController.text+"("+FirebaseAuth.instance.currentUser!.email.toString()+")"}/" +
+            "${fromController.text + "(" + FirebaseAuth.instance.currentUser!.email.toString() + ")"}/" +
             "${toController.text}/" +
             "${messageController.text}"),
         headers: {
@@ -65,51 +119,51 @@ class _HomePageState extends State<HomePage> {
     print("dajkgsfuyadsbivfuydsavf");
     print(value);
     if (value["success"] == true) {
-      Helper.DialogueHelper(context, value["message"],value["data"]["response"]);
-         await FirebaseFirestore.instance
+      Helper.DialogueHelper(
+          context, value["message"], value["data"]["response"]);
+      await FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get()
-          .then((value)async {
-          await FirebaseFirestore.instance
-          .collection("users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({"credit": value.data()!["credit"] - 1}).then((value) {
-            print("Updated");
-          });
-      });
-      
-      FirebaseFirestore.instance.collection("history").doc().set({
-        "from":fromController.text,
-        "phone_no":toController.text,
-        "message":messageController.text,
-        "date":DateTime.now(),
-        "userId":FirebaseAuth.instance.currentUser!.uid
-      }).then((value) {
-             messageController.clear();
+          .then((value) async {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({"credit": value.data()!["credit"] - 1}).then((value) {
+          print("Updated");
+        });
       });
 
-     
-       setState(() {
+      FirebaseFirestore.instance.collection("history").doc().set({
+        "from": fromController.text,
+        "phone_no": toController.text,
+        "message": messageController.text,
+        "date": DateTime.now(),
+        "userId": FirebaseAuth.instance.currentUser!.uid
+      }).then((value) {
+        messageController.clear();
+      });
+
+      setState(() {
         isLoading = false;
       });
 
-
-
-
-
-
-   
       // toController.clear();
       // fromController.clear();
-     
-  
     } else {
-       setState(() {
+      setState(() {
         isLoading = false;
       });
-      Helper.DialogueHelper(context, value["message"],value["data"]["response"]);
+      Helper.DialogueHelper(
+          context, value["message"], value["data"]["response"]);
     }
+  }
+
+  @override
+  void initState() {
+    checkUser();
+    // TODO: implement initState
+    super.initState();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -214,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                                 );
                               }).then((value) {
                             setState(() {
-                              isLoading=false;
+                              isLoading = false;
                             });
                           });
                         },
@@ -254,7 +308,10 @@ class _HomePageState extends State<HomePage> {
                                     width: 150,
                                     child: StreamBuilder<QuerySnapshot>(
                                       stream: FirebaseFirestore.instance
-                                          .collection('users').where("id",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                                          .collection('users')
+                                          .where("id",
+                                              isEqualTo: FirebaseAuth
+                                                  .instance.currentUser!.uid)
                                           .snapshots(),
                                       builder: (ctx, streamSnapshot) {
                                         if (streamSnapshot.connectionState ==
@@ -269,64 +326,84 @@ class _HomePageState extends State<HomePage> {
                                         }
                                         final _blogs =
                                             streamSnapshot.data?.docs as List;
-                                        return ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: 1,
-                                          itemBuilder: (ctx, index) {
-                                            final UserModel _userData =
-                                                UserModel.fromJson(
-                                                    Map<String, dynamic>.from(
-                                                        _blogs[index].data()));
+                                        return _blogs.isEmpty
+                                            ? Center(
+                                                child: LoadingAnimationWidget
+                                                    .hexagonDots(
+                                                color: Colors.black
+                                                    .withOpacity(0.7),
+                                                size: 30,
+                                              ))
+                                            : ListView.builder(
+                                                padding: EdgeInsets.zero,
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount: 1,
+                                                itemBuilder: (ctx, index) {
+                                                  final UserModel _userData =
+                                                      UserModel.fromJson(Map<
+                                                              String,
+                                                              dynamic>.from(
+                                                          _blogs[index]
+                                                              .data()));
 
-                                            return Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text("${_userData.credit} SMS",
-                                                    textAlign: TextAlign.left,
-                                                    style:
-                                                        GoogleFonts.comfortaa(
-                                                      textStyle:
-                                                          const TextStyle(
-                                                              fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w900,
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      37,
-                                                                      0,
-                                                                      0)),
-                                                    )),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      print("gift Shop");
-                                                      Get.to(CreditPage(
-                                                          pageControllerR: 0,
-                                                          value: const [
-                                                            "Store",
-                                                            "History"
-                                                          ]));
-                                                    },
-                                                    icon: Icon(
-                                                      Icons
-                                                          .card_giftcard_rounded,
-                                                      color: Color.fromARGB(
-                                                          255, 255, 154, 13),
-                                                    ))
-                                              ],
-                                            );
-                                          },
-                                        );
+                                                  return Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                          "${_userData.credit} SMS",
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: GoogleFonts
+                                                              .comfortaa(
+                                                            textStyle:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w900,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            37,
+                                                                            0,
+                                                                            0)),
+                                                          )),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      IconButton(
+                                                          onPressed: () {
+                                                            print("gift Shop");
+                                                            Get.to(CreditPage(
+                                                                pageControllerR:
+                                                                    0,
+                                                                value: const [
+                                                                  "Store",
+                                                                  "History"
+                                                                ]));
+                                                          },
+                                                          icon: Icon(
+                                                            Icons
+                                                                .card_giftcard_rounded,
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    255,
+                                                                    154,
+                                                                    13),
+                                                          ))
+                                                    ],
+                                                  );
+                                                },
+                                              );
                                       },
                                     ),
                                   )))),
@@ -638,39 +715,42 @@ class _HomePageState extends State<HomePage> {
                                                       height: 20,
                                                     ),
                                                     InkWell(
-                                                        onTap:isLoading?(){}: () async {
-                                                          if (_formKey
-                                                              .currentState!
-                                                              .validate()) {
-                                                            setState(() {
-                                                              isLoading = true;
-                                                            });
-                                                            var connectivityResult =
-                                                                await (Connectivity()
-                                                                    .checkConnectivity());
-                                                            if (connectivityResult ==
-                                                                    ConnectivityResult
-                                                                        .mobile ||
-                                                                connectivityResult ==
-                                                                    ConnectivityResult
-                                                                        .wifi) {
-                                                             creditCheck();
-                                                            } else {
-                                                              setState(() {
-                                                                isLoading =
-                                                                    false;
-                                                              });
-                                                              ScaffoldMessenger
-                                                                      .of(
-                                                                          context)
-                                                                  .showSnackBar(
-                                                                      SnackBar(
-                                                                content: Text(
-                                                                    "No Internet Connection"),
-                                                              ));
-                                                            }
-                                                          }
-                                                        },
+                                                        onTap: isLoading
+                                                            ? () {}
+                                                            : () async {
+                                                                if (_formKey
+                                                                    .currentState!
+                                                                    .validate()) {
+                                                                  setState(() {
+                                                                    isLoading =
+                                                                        true;
+                                                                  });
+                                                                  var connectivityResult =
+                                                                      await (Connectivity()
+                                                                          .checkConnectivity());
+                                                                  if (connectivityResult ==
+                                                                          ConnectivityResult
+                                                                              .mobile ||
+                                                                      connectivityResult ==
+                                                                          ConnectivityResult
+                                                                              .wifi) {
+                                                                    creditCheck();
+                                                                  } else {
+                                                                    setState(
+                                                                        () {
+                                                                      isLoading =
+                                                                          false;
+                                                                    });
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                            SnackBar(
+                                                                      content: Text(
+                                                                          "No Internet Connection"),
+                                                                    ));
+                                                                  }
+                                                                }
+                                                              },
                                                         child: ClipRRect(
                                                             child:
                                                                 BackdropFilter(
@@ -754,7 +834,7 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(
                 Icons.person_sharp,
-                color: Color.fromARGB(255, 255, 154,13),
+                color: Color.fromARGB(255, 255, 154, 13),
               ),
             ),
           ),

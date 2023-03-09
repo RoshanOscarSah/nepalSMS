@@ -49,6 +49,7 @@ class _CreditPageState extends State<CreditPage> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((value) async {
+          
       await FirebaseFirestore.instance
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
