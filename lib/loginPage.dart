@@ -277,7 +277,7 @@ class _LoginPageState extends State<LoginPage> {
                                             const SizedBox(
                                               height: 40,
                                             ),
-                                            if (Platform.isAndroid)
+                                            /* if (Platform.isAndroid)
                                               InkWell(
                                                 onTap: () {
                                                   signInGuest();
@@ -355,12 +355,12 @@ class _LoginPageState extends State<LoginPage> {
                                                               ),
                                                             )))),
                                               ),
-
-                                            if (Platform.isIOS)
+ */
+                                            // if (Platform.isIOS)
                                             Padding(
                                               padding:
                                                   const EdgeInsets.symmetric(
-                                                      horizontal: 65,
+                                                      horizontal: 40,
                                                       vertical: 10),
                                               child: SizedBox(
                                                 width: 250,
@@ -421,30 +421,6 @@ class _LoginPageState extends State<LoginPage> {
                                                             accessToken: credential
                                                                 .authorizationCode);
 
-                                                    // FirebaseAuth.instance
-                                                    //     .signInWithCredential(
-                                                    //         credentials)
-                                                    //     .then((value) {
-                                                    //   print("sign in vayo");
-                                                    //   Get.to(HomePage());
-                                                    // });
-
-                                                    // var email = googleUser!.email;
-                                                    // var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-                                                    //                                                 if (methods.contains(
-                                                    //                                                     'google.com')) {
-                                                    //                                                   var userCredential =
-                                                    //                                                       (await FirebaseAuth
-                                                    //                                                               .instance
-                                                    //                                                               .signInWithCredential(
-                                                    //                                                                   credentials))
-                                                    //                                                           .user;
-                                                    //                                                   Navigator.pushReplacement(
-                                                    //                                                       context,
-                                                    //                                                       MaterialPageRoute(
-                                                    //                                                           builder: (context) =>
-                                                    //                                                               const HomePage()));
-                                                    //                                                 } else {
                                                     var userCredential =
                                                         (await FirebaseAuth
                                                                 .instance
@@ -477,6 +453,31 @@ class _LoginPageState extends State<LoginPage> {
                                                         Get.to(HomePage());
                                                       });
                                                     }
+
+                                                    // FirebaseAuth.instance
+                                                    //     .signInWithCredential(
+                                                    //         credentials)
+                                                    //     .then((value) {
+                                                    //   print("sign in vayo");
+                                                    //   Get.to(HomePage());
+                                                    // });
+
+                                                    // var email = googleUser!.email;
+                                                    // var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+                                                    //                                                 if (methods.contains(
+                                                    //                                                     'google.com')) {
+                                                    //                                                   var userCredential =
+                                                    //                                                       (await FirebaseAuth
+                                                    //                                                               .instance
+                                                    //                                                               .signInWithCredential(
+                                                    //                                                                   credentials))
+                                                    //                                                           .user;
+                                                    //                                                   Navigator.pushReplacement(
+                                                    //                                                       context,
+                                                    //                                                       MaterialPageRoute(
+                                                    //                                                           builder: (context) =>
+                                                    //                                                               const HomePage()));
+                                                    //                                                 } else {
 
                                                     // This is the endpoint that will convert an authorization code obtained
                                                     // via Sign in with Apple into a session in your system
@@ -521,7 +522,7 @@ class _LoginPageState extends State<LoginPage> {
                                                             .post(
                                                       signInWithAppleEndpoint,
                                                     );
-
+                                                    print("session");
                                                     print(session);
 
                                                     // If we got this far, a session based on the Apple ID credential has been created in your system,
@@ -613,10 +614,10 @@ class _LoginPageState extends State<LoginPage> {
                                             //                 ),
                                             //               )))),
                                             // ),
-                                            if (Platform.isIOS)
-                                              SizedBox(
-                                                height: 20,
-                                              ),
+                                            // if (Platform.isIOS)
+                                            SizedBox(
+                                              height: 20,
+                                            ),
                                             InkWell(
                                               onTap: () {
                                                 signInGoogle().then((value) {
