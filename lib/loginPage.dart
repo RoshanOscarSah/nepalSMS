@@ -614,10 +614,10 @@ class _LoginPageState extends State<LoginPage> {
                                             //                 ),
                                             //               )))),
                                             // ),
-                                            if (Platform.isIOS)
-                                              SizedBox(
-                                                height: 20,
-                                              ),
+                                            // if (Platform.isIOS)
+                                            SizedBox(
+                                              height: 20,
+                                            ),
                                             InkWell(
                                               onTap: () {
                                                 signInGoogle().then((value) {
