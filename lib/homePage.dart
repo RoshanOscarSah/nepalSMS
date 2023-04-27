@@ -105,8 +105,8 @@ class _HomePageState extends State<HomePage> {
   sendSms() async {
     final response = await http.get(
         // ignore: prefer_interpolation_to_compose_strings
-        Uri.parse("https://cylinder.eachut.com/sendmessage/" +
-            "v2_f5RKamGWtlI8w767gNp9Xk2OKK8.5NuE/" +
+        ///smsnepal/sendmessage/:from/:to/:message
+        Uri.parse("https://cylinder.eachut.com/smsnepal/sendmessage/" +
             "${fromController.text + "(" + FirebaseAuth.instance.currentUser!.email.toString() + ")"}/" +
             "${toController.text}/" +
             "${messageController.text}"),

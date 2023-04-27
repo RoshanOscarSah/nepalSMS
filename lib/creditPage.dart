@@ -49,7 +49,6 @@ class _CreditPageState extends State<CreditPage> {
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get()
         .then((value) async {
-          
       await FirebaseFirestore.instance
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -607,7 +606,8 @@ class _CreditPageState extends State<CreditPage> {
                                                                                         ),
                                                                                         child: Padding(
                                                                                           padding: const EdgeInsets.all(8.0),
-                                                                                          child: Text("${_userData.price}  PURCHASE",
+                                                                                          child: Text("FREE",
+                                                                                              // "${_userData.price}  PURCHASE",
                                                                                               textAlign: TextAlign.left,
                                                                                               style: GoogleFonts.comfortaa(
                                                                                                 textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white),

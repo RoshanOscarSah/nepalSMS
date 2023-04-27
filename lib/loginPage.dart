@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  signInGuest() async {
+  /* signInGuest() async {
     await FirebaseAuth.instance
         .signInWithEmailAndPassword(
             email: "test@gmail.com", password: "12345678")
@@ -69,11 +69,96 @@ class _LoginPageState extends State<LoginPage> {
       Get.to(HomePage());
     });
   }
+ */
 
-  apple() {
+  Future<void> signInApple() async {
     print("apple");
-    // Navigator.pushReplacement(
-    //     context, MaterialPageRoute(builder: (context) => const HomePage()));
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      webAuthenticationOptions: WebAuthenticationOptions(
+        // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+        clientId: 'com.eachut.nepalsms2',
+        // 'de.lunaone.flutter.signinwithappleexample.service',
+
+        redirectUri:
+            // "intent://callback?https://nepalsms-43400.firebaseapp.com/__/auth/handler#Intent;package=com.eachut.nepalsms;scheme=signinwithapple;end"),
+
+            // while for Android you will be using the API server that redirects back into your app via a deep link
+            Uri.parse(
+                'https://vaulted-picturesque-alder.glitch.me/callbacks/sign_in_with_apple'),
+        // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
+        // 'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
+      ),
+      // TODO: Remove these if you have no need for them
+      // nonce: 'example-nonce',
+      // state: 'example-state',
+    );
+
+    // ignore: avoid_print
+    print(credential);
+    print(credential.state);
+
+    print(credential.email);
+    print(credential.familyName);
+    print(credential.givenName);
+    print(credential.authorizationCode);
+    print(credential.identityToken);
+    print(credential.userIdentifier);
+    final oAuthProvider = OAuthProvider('apple.com');
+
+    var credentials = oAuthProvider.credential(
+        idToken: credential.identityToken,
+        accessToken: credential.authorizationCode);
+
+    var userCredential =
+        (await FirebaseAuth.instance.signInWithCredential(credentials)).user;
+    var email = userCredential!.email;
+    var methods =
+        await FirebaseAuth.instance.fetchSignInMethodsForEmail(email!);
+    if (methods.contains('apple.com')) {
+      Get.to(HomePage());
+    } else {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential!.uid)
+          .set({
+        "id": userCredential!.uid,
+        "name": userCredential!.email,
+        "credit": 1,
+        "created_on": DateTime.now(),
+      }).then((value) {
+        Get.to(HomePage());
+      });
+    }
+
+    // This is the endpoint that will convert an authorization code obtained
+    // via Sign in with Apple into a session in your system
+    final signInWithAppleEndpoint = Uri(
+      scheme: 'https',
+      host: 'vaulted-picturesque-alder.glitch.me',
+      path: '/sign_in_with_apple',
+      queryParameters: <String, String>{
+        'code': credential.authorizationCode,
+        if (credential.givenName != null) 'firstName': credential.givenName!,
+        if (credential.familyName != null) 'lastName': credential.familyName!,
+        'useBundleId':
+            !kIsWeb && (Platform.isIOS || Platform.isMacOS) ? 'true' : 'false',
+        if (credential.state != null) 'state': credential.state!,
+      },
+    );
+
+    final session = await http.Client().post(
+      signInWithAppleEndpoint,
+    );
+    print("session");
+    print(session);
+
+    // If we got this far, a session based on the Apple ID credential has been created in your system,
+    // and you can now set this as the app's session
+    // ignore: avoid_print
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -365,171 +450,9 @@ class _LoginPageState extends State<LoginPage> {
                                               child: SizedBox(
                                                 width: 250,
                                                 child: SignInWithAppleButton(
-                                                  onPressed: () async {
-                                                    final credential =
-                                                        await SignInWithApple
-                                                            .getAppleIDCredential(
-                                                      scopes: [
-                                                        AppleIDAuthorizationScopes
-                                                            .email,
-                                                        AppleIDAuthorizationScopes
-                                                            .fullName,
-                                                      ],
-                                                      webAuthenticationOptions:
-                                                          WebAuthenticationOptions(
-                                                        // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-                                                        clientId:
-                                                            'com.eachut.nepalsms2',
-                                                        // 'de.lunaone.flutter.signinwithappleexample.service',
-
-                                                        redirectUri:
-                                                            // "intent://callback?https://nepalsms-43400.firebaseapp.com/__/auth/handler#Intent;package=com.eachut.nepalsms;scheme=signinwithapple;end"),
-
-                                                            // while for Android you will be using the API server that redirects back into your app via a deep link
-                                                            Uri.parse(
-                                                                'https://vaulted-picturesque-alder.glitch.me/callbacks/sign_in_with_apple'),
-                                                        // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
-                                                        // 'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
-                                                      ),
-                                                      // TODO: Remove these if you have no need for them
-                                                      // nonce: 'example-nonce',
-                                                      // state: 'example-state',
-                                                    );
-
-                                                    // ignore: avoid_print
-                                                    print(credential);
-                                                    print(credential.state);
-
-                                                    print(credential.email);
-                                                    print(
-                                                        credential.familyName);
-                                                    print(credential.givenName);
-                                                    print(credential
-                                                        .authorizationCode);
-                                                    print(credential
-                                                        .identityToken);
-                                                    print(credential
-                                                        .userIdentifier);
-                                                    final oAuthProvider =
-                                                        OAuthProvider(
-                                                            'apple.com');
-
-                                                    var credentials =
-                                                        oAuthProvider.credential(
-                                                            idToken: credential
-                                                                .identityToken,
-                                                            accessToken: credential
-                                                                .authorizationCode);
-
-                                                    var userCredential =
-                                                        (await FirebaseAuth
-                                                                .instance
-                                                                .signInWithCredential(
-                                                                    credentials))
-                                                            .user;
-                                                    var email =
-                                                        userCredential!.email;
-                                                    var methods = await FirebaseAuth
-                                                        .instance
-                                                        .fetchSignInMethodsForEmail(
-                                                            email!);
-                                                    if (methods.contains(
-                                                        'apple.com')) {
-                                                      Get.to(HomePage());
-                                                    } else {
-                                                      FirebaseFirestore.instance
-                                                          .collection("users")
-                                                          .doc(userCredential!
-                                                              .uid)
-                                                          .set({
-                                                        "id":
-                                                            userCredential!.uid,
-                                                        "name": userCredential!
-                                                            .email,
-                                                        "credit": 1,
-                                                        "created_on":
-                                                            DateTime.now(),
-                                                      }).then((value) {
-                                                        Get.to(HomePage());
-                                                      });
-                                                    }
-
-                                                    // FirebaseAuth.instance
-                                                    //     .signInWithCredential(
-                                                    //         credentials)
-                                                    //     .then((value) {
-                                                    //   print("sign in vayo");
-                                                    //   Get.to(HomePage());
-                                                    // });
-
-                                                    // var email = googleUser!.email;
-                                                    // var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
-                                                    //                                                 if (methods.contains(
-                                                    //                                                     'google.com')) {
-                                                    //                                                   var userCredential =
-                                                    //                                                       (await FirebaseAuth
-                                                    //                                                               .instance
-                                                    //                                                               .signInWithCredential(
-                                                    //                                                                   credentials))
-                                                    //                                                           .user;
-                                                    //                                                   Navigator.pushReplacement(
-                                                    //                                                       context,
-                                                    //                                                       MaterialPageRoute(
-                                                    //                                                           builder: (context) =>
-                                                    //                                                               const HomePage()));
-                                                    //                                                 } else {
-
-                                                    // This is the endpoint that will convert an authorization code obtained
-                                                    // via Sign in with Apple into a session in your system
-                                                    final signInWithAppleEndpoint =
-                                                        Uri(
-                                                      scheme: 'https',
-                                                      host:
-                                                          'vaulted-picturesque-alder.glitch.me',
-                                                      path:
-                                                          '/sign_in_with_apple',
-                                                      queryParameters: <String,
-                                                          String>{
-                                                        'code': credential
-                                                            .authorizationCode,
-                                                        if (credential
-                                                                .givenName !=
-                                                            null)
-                                                          'firstName':
-                                                              credential
-                                                                  .givenName!,
-                                                        if (credential
-                                                                .familyName !=
-                                                            null)
-                                                          'lastName': credential
-                                                              .familyName!,
-                                                        'useBundleId': !kIsWeb &&
-                                                                (Platform
-                                                                        .isIOS ||
-                                                                    Platform
-                                                                        .isMacOS)
-                                                            ? 'true'
-                                                            : 'false',
-                                                        if (credential.state !=
-                                                            null)
-                                                          'state':
-                                                              credential.state!,
-                                                      },
-                                                    );
-
-                                                    final session =
-                                                        await http.Client()
-                                                            .post(
-                                                      signInWithAppleEndpoint,
-                                                    );
-                                                    print("session");
-                                                    print(session);
-
-                                                    // If we got this far, a session based on the Apple ID credential has been created in your system,
-                                                    // and you can now set this as the app's session
-                                                    // ignore: avoid_print
-                                                  },
-                                                ),
+                                                    onPressed: () {
+                                                  signInApple();
+                                                }),
                                               ),
                                             ),
                                             // InkWell(
