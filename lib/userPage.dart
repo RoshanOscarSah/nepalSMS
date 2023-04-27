@@ -7,21 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/getStorage.dart';
-import 'dart:convert';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/loginPage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import 'helper.dart';
-import 'homePage.dart';
 import 'models/history_model.dart';
 
 class UserPage extends StatefulWidget {
@@ -36,16 +29,10 @@ class _UserPageState extends State<UserPage> {
 
   Future<void> deleteGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-    final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
 
     var email = googleUser!.email;
     var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
     if (methods.contains('google.com')) {
-      var userCredential =
-          (await FirebaseAuth.instance.signInWithCredential(credential)).user;
 
       FirebaseAuth.instance.currentUser;
 
@@ -66,7 +53,7 @@ class _UserPageState extends State<UserPage> {
         AppleIDAuthorizationScopes.fullName,
       ],
       webAuthenticationOptions: WebAuthenticationOptions(
-        // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+        //  Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
         clientId: 'com.eachut.nepalsms2',
         // 'de.lunaone.flutter.signinwithappleexample.service',
 
@@ -79,7 +66,7 @@ class _UserPageState extends State<UserPage> {
         // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
         // 'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
       ),
-      // TODO: Remove these if you have no need for them
+      // Remove these if you have no need for them
       // nonce: 'example-nonce',
       // state: 'example-state',
     );
@@ -166,48 +153,53 @@ class _UserPageState extends State<UserPage> {
                   color: Colors.white.withOpacity(0.8),
                 ),
               ),
-              height: 120,
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      print(FirebaseAuth
-                          .instance.currentUser!.providerData[0].providerId);
-                      if (FirebaseAuth.instance.currentUser!.providerData[0]
-                              .providerId ==
-                          "apple.com") {
-                        deleteApple();
-                      } else {
-                        deleteGoogle();
-                      }
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.delete,
-                        color: Colors.red,
+              height: 150,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          print(FirebaseAuth.instance.currentUser!
+                              .providerData[0].providerId);
+                          if (FirebaseAuth.instance.currentUser!.providerData[0]
+                                  .providerId ==
+                              "apple.com") {
+                            deleteApple();
+                          } else {
+                            deleteGoogle();
+                          }
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          title: Text("Sure Want to Delete Account?",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ),
                       ),
-                      title: Text("Sure Want to Delete Account?",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ),
+                      InkWell(
+                        onTap: () async {
+                          Navigator.pop(context);
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.cancel,
+                            color: Colors.blue,
+                          ),
+                          title: Text("No",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                      )
+                    ],
                   ),
-                  InkWell(
-                    onTap: () async {
-                      Navigator.pop(context);
-                    },
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.cancel,
-                        color: Colors.blue,
-                      ),
-                      title: Text("No",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  )
-                ],
+                ),
               ),
             ),
           );
@@ -755,7 +747,7 @@ class _UserPageState extends State<UserPage> {
               },
               icon: const Icon(
                 Icons.arrow_back_ios,
-                color: Color(0xFFFFECAF),
+                color: Color.fromARGB(255, 255, 154, 13),
               ),
             ),
           ),

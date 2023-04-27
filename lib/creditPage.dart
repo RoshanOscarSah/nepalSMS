@@ -1,26 +1,18 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, must_be_immutable, unnecessary_cast
 
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/getStorage.dart';
-import 'dart:convert';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:nepal_sms/loginPage.dart';
 import 'package:nepal_sms/swippableBox.dart';
 import 'dart:io' show Platform;
 
 import 'models/creditModels.dart';
 import 'models/firebaseModel.dart';
-import 'helper.dart';
 import 'models/purchasedModels.dart';
 
 class CreditPage extends StatefulWidget {
@@ -65,7 +57,7 @@ class _CreditPageState extends State<CreditPage> {
       "date": DateTime.now(),
       "id": FirebaseAuth.instance.currentUser!.uid
     }).then((value) {
-      Get.snackbar("Purchased", "$no sms purchased on ${price}");
+      Get.snackbar("Purchased", "$no sms purchased on $price");
       print(no);
       addCredit(int.parse(no));
     });
@@ -283,12 +275,8 @@ class _CreditPageState extends State<CreditPage> {
                                                             icon: Icon(
                                                               Icons
                                                                   .card_giftcard_rounded,
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      255,
-                                                                      154,
-                                                                      13),
+                                                              color:
+                                                                  Colors.black,
                                                             )),
                                                       ],
                                                     );
@@ -1067,7 +1055,7 @@ class _CreditPageState extends State<CreditPage> {
               },
               icon: const Icon(
                 Icons.arrow_back_ios,
-                color: Color(0xFFFFECAF),
+                color: Color.fromARGB(255, 255, 154, 13),
               ),
             ),
           ),

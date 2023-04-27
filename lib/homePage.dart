@@ -7,17 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/creditPage.dart';
-import 'package:nepal_sms/getStorage.dart';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/userPage.dart';
 
-import 'loginPage.dart';
 import 'models/firebaseModel.dart';
 import 'helper.dart';
 
@@ -162,7 +159,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     checkUser();
-    // TODO: implement initState
     super.initState();
   }
 

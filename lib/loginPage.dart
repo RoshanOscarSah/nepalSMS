@@ -7,20 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/getStorage.dart';
-import 'dart:convert';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/homePage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import 'helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -40,8 +34,6 @@ class _LoginPageState extends State<LoginPage> {
     var email = googleUser!.email;
     var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
     if (methods.contains('google.com')) {
-      var userCredential =
-          (await FirebaseAuth.instance.signInWithCredential(credential)).user;
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     } else {
@@ -51,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
           .collection("users")
           .doc(userCredential!.uid)
           .set({
-        "id": userCredential!.uid,
-        "name": userCredential!.email,
+        "id": userCredential.uid,
+        "name": userCredential.email,
         "credit": 1,
         "created_on": DateTime.now(),
       });
@@ -79,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
         AppleIDAuthorizationScopes.fullName,
       ],
       webAuthenticationOptions: WebAuthenticationOptions(
-        // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+        // Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
         clientId: 'com.eachut.nepalsms2',
         // 'de.lunaone.flutter.signinwithappleexample.service',
 
@@ -92,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
         // 'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
         // 'https://nepalsms-43400.firebaseapp.com/__/auth/handler'),
       ),
-      // TODO: Remove these if you have no need for them
+      // Remove these if you have no need for them
       // nonce: 'example-nonce',
       // state: 'example-state',
     );
@@ -123,10 +115,10 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       FirebaseFirestore.instance
           .collection("users")
-          .doc(userCredential!.uid)
+          .doc(userCredential.uid)
           .set({
-        "id": userCredential!.uid,
-        "name": userCredential!.email,
+        "id": userCredential.uid,
+        "name": userCredential.email,
         "credit": 1,
         "created_on": DateTime.now(),
       }).then((value) {
@@ -161,7 +153,6 @@ class _LoginPageState extends State<LoginPage> {
     // ignore: avoid_print
   }
 
-  final _formKey = GlobalKey<FormState>();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
   TextEditingController messageController = TextEditingController();
