@@ -1,13 +1,16 @@
-// ignore_for_file: file_names, must_be_immutable, unnecessary_cast
+// ignore_for_file: file_names, must_be_immutable, unnecessary_cast, non_constant_identifier_names
 
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esewa_flutter/esewa_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:nepal_sms/khalti.dart';
 import 'package:nepal_sms/swippableBox.dart';
 import 'dart:io' show Platform;
 
@@ -26,8 +29,11 @@ class CreditPage extends StatefulWidget {
 
 class _CreditPageState extends State<CreditPage> {
   PageController _pageController = PageController();
+  String refId = '';
+  String hasError = '';
+
   @override
-  void initState() {
+  initState() {
     head = widget.value!.length < 1 ? head : widget.value!;
     super.initState();
     _pageController = widget.pageControllerR == 0
@@ -61,6 +67,54 @@ class _CreditPageState extends State<CreditPage> {
       print(no);
       addCredit(int.parse(no));
     });
+  }
+
+  esewa() async {
+    //for dev
+    final config = ESewaConfig.dev(
+      amt: 100,
+      pid: 'product_id',
+      su: 'https://success.com.np',
+      fu: 'https://failure.com.np',
+    );
+
+    //for real
+    /* final config = ESewaConfig.live(
+      amt: 100,
+      scd: 'merchant_id',
+      pid: 'product_id',
+      su: 'https://success.com.np',
+      fu: 'https://failure.com.np',
+    ); */
+
+    final result = await Esewa.i.init(
+      context: context,
+      eSewaConfig: config,
+    );
+
+    if (result.hasData) {
+      // Payment successful
+      final response = result.data!;
+      print('Payment successful. Ref ID: ${response.refId}');
+    } else {
+      // Payment failed or cancelled
+      final error = result.error!;
+      print('Payment failed or cancelled. Error: $error');
+    }
+  }
+
+  inAppPurchase(price, no_of_sms) {
+    esewa();
+    //if payment success
+    addHistory(price: price, no: no_of_sms);
+    if (Platform.isAndroid) {
+      /* Get.snackbar("Purchase", "android"); */
+    } else if (Platform.isIOS) {
+      /*  Get.snackbar("Purchase", "ios"); */
+    } else {
+      Get.snackbar("Not available for this platfrom",
+          "Please purchase from ios and android");
+    }
   }
 
   List<String> head = ["Find", "Request"];
@@ -545,36 +599,29 @@ class _CreditPageState extends State<CreditPage> {
                                                                             padding:
                                                                                 const EdgeInsets.all(8.0),
                                                                             child:
-                                                                                Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                Column(
                                                                               children: [
                                                                                 Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                                                   children: [
-                                                                                    const Icon(Icons.sms),
-                                                                                    const SizedBox(
-                                                                                      width: 10,
+                                                                                    Row(
+                                                                                      children: [
+                                                                                        const Icon(Icons.sms),
+                                                                                        const SizedBox(
+                                                                                          width: 10,
+                                                                                        ),
+                                                                                        Text(
+                                                                                          _userData.no_of_sms.toString() + " SMS",
+                                                                                          textAlign: TextAlign.left,
+                                                                                          style: GoogleFonts.comfortaa(
+                                                                                            textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
                                                                                     ),
-                                                                                    Text(_userData.no_of_sms.toString() + " SMS",
-                                                                                        textAlign: TextAlign.left,
-                                                                                        style: GoogleFonts.comfortaa(
-                                                                                          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                                        )),
-                                                                                  ],
-                                                                                ),
-                                                                                Column(
-                                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                                  children: [
                                                                                     InkWell(
                                                                                       onTap: () {
-                                                                                        addHistory(price: _userData.price, no: _userData.no_of_sms);
-                                                                                        if (Platform.isAndroid) {
-                                                                                          /* Get.snackbar("Purchase", "android"); */
-                                                                                        } else if (Platform.isIOS) {
-                                                                                          /*  Get.snackbar("Purchase", "ios"); */
-                                                                                        } else {
-                                                                                          Get.snackbar("Not available for this platfrom", "Please purchase from ios and android");
-                                                                                        }
+                                                                                        inAppPurchase(_userData.price, _userData.no_of_sms);
                                                                                       },
                                                                                       child: Container(
                                                                                         decoration: BoxDecoration(
@@ -594,8 +641,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                                         ),
                                                                                         child: Padding(
                                                                                           padding: const EdgeInsets.all(8.0),
-                                                                                          child: Text("FREE",
-                                                                                              // "${_userData.price}  PURCHASE",
+                                                                                          child: Text("RS ${_userData.price}",
                                                                                               textAlign: TextAlign.left,
                                                                                               style: GoogleFonts.comfortaa(
                                                                                                 textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white),
@@ -603,8 +649,132 @@ class _CreditPageState extends State<CreditPage> {
                                                                                         ),
                                                                                       ),
                                                                                     ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 20,
+                                                                                ),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                  children: [
+                                                                                    InkWell(
+                                                                                      onTap: () {
+                                                                                        Navigator.push(
+                                                                                            context,
+                                                                                            MaterialPageRoute(
+                                                                                                builder: (context) => KhaltiPayment(
+                                                                                                      amount: _userData.price.toString(),
+                                                                                                      productIdentity: _userData.no_of_sms.toString(),
+                                                                                                      productName: "SMS",
+                                                                                                      productUrl: 'https://eachut.com/',
+                                                                                                      additionalData: {
+                                                                                                        'vendor': 'SMS Nepal',
+                                                                                                        'manufacturer': 'Eachut',
+                                                                                                      },
+                                                                                                    )));
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        height: 40,
+                                                                                        decoration: BoxDecoration(
+                                                                                          gradient: const LinearGradient(
+                                                                                            colors: [
+                                                                                              Colors.blue,
+                                                                                              Colors.blue,
+                                                                                            ],
+                                                                                            begin: AlignmentDirectional.topStart,
+                                                                                            end: AlignmentDirectional.bottomEnd,
+                                                                                          ),
+                                                                                          borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                                                                          border: Border.all(
+                                                                                            width: 1.5,
+                                                                                            color: Colors.blue,
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: Center(
+                                                                                            child: Text("Pay with Khalti",
+                                                                                                textAlign: TextAlign.left,
+                                                                                                style: GoogleFonts.comfortaa(
+                                                                                                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white),
+                                                                                                )),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                                                      children: [
+                                                                                        /// Example Use case - 1
+                                                                                        EsewaPayButton(
+                                                                                          paymentConfig: ESewaConfig.dev(
+                                                                                            su: 'http://merchant.com.np/page/esewa_payment_success',
+                                                                                            fu: 'http://merchant.com.np/page/esewa_payment_failed',
+                                                                                            scd: "EPAYTEST",
+                                                                                            amt: 10,
+                                                                                            psc: 0,
+                                                                                            pdc: 0,
+                                                                                            txAmt: 0,
+                                                                                            tAmt: 100,
+                                                                                            pid: "ee2c3ca1-696b-4cc5-a6be-2c40d929d453",
+                                                                                          ),
+                                                                                          width: 100,
+                                                                                          onFailure: (result) async {
+                                                                                            setState(() {
+                                                                                              refId = '';
+                                                                                              hasError = result;
+                                                                                            });
+                                                                                            Get.snackbar("Failed", hasError);
+                                                                                            if (kDebugMode) {
+                                                                                              print(result);
+                                                                                            }
+                                                                                          },
+                                                                                          onSuccess: (result) async {
+                                                                                            addHistory(price: _userData.price, no: _userData.no_of_sms);
 
-                                                                                    //start
+                                                                                            setState(() {
+                                                                                              hasError = '';
+                                                                                              refId = result.refId!;
+                                                                                            });
+                                                                                            Get.snackbar("Purchased", "Credit Added to your account" + refId);
+                                                                                            if (kDebugMode) {
+                                                                                              print(result.toJson());
+                                                                                            }
+                                                                                          },
+                                                                                        ),
+
+                                                                                        /// Example Use case - 1
+                                                                                        // TextButton(
+                                                                                        //   onPressed: () async {
+                                                                                        //     final result = await Esewa.i.init(
+                                                                                        //         context: context,
+                                                                                        //         eSewaConfig: ESewaConfig.dev(
+                                                                                        //           // .live for live
+                                                                                        //           su: 'https://www.marvel.com/hello',
+                                                                                        //           amt: 10,
+                                                                                        //           fu: 'https://www.marvel.com/hello',
+                                                                                        //           pid: '1212',
+                                                                                        //           // scd: dotenv.env['ESEWA_SCD']!
+                                                                                        //         ));
+                                                                                        //     // final result = await fakeEsewa();
+                                                                                        //     if (result.hasData) {
+                                                                                        //       final response = result.data!;
+                                                                                        //       if (kDebugMode) {
+                                                                                        //         print(response.toJson());
+                                                                                        //       }
+                                                                                        //     } else {
+                                                                                        //       if (kDebugMode) {
+                                                                                        //         print(result.error);
+                                                                                        //       }
+                                                                                        //     }
+                                                                                        //   },
+                                                                                        //   child: const Text('Pay with Esewa'),
+                                                                                        // ),
+                                                                                        // you can uncomment below two line
+                                                                                        // if (refId.isNotEmpty) Text('Console: Payment Success, Ref Id: $refId'),
+                                                                                        // if (hasError.isNotEmpty) Text('Console: Payment Failed, Message: $hasError'),
+                                                                                      ],
+                                                                                    ),
                                                                                   ],
                                                                                 )
                                                                               ],
