@@ -271,10 +271,14 @@ class _CreditPageState extends State<CreditPage> {
                                                 if (streamSnapshot
                                                         .connectionState ==
                                                     ConnectionState.waiting) {
-                                                  return const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
+                                                  return Center(
+                                                      child:
+                                                          LoadingAnimationWidget
+                                                              .hexagonDots(
+                                                    color: Colors.black
+                                                        .withOpacity(0.7),
+                                                    size: 20,
+                                                  ));
                                                 }
                                                 final _blogs =
                                                     streamSnapshot.data?.docs ??

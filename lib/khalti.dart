@@ -1,8 +1,11 @@
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:khalti/khalti.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class KhaltiPayment extends StatefulWidget {
@@ -312,7 +315,12 @@ class _BankingState extends State<Banking> with AutomaticKeepAliveClientMixin {
           );
         }
 
-        return const Center(child: CircularProgressIndicator());
+        return Center(
+            child: LoadingAnimationWidget.hexagonDots(
+          color: Colors.black.withOpacity(0.7),
+          size: 30,
+        ));
+        ;
       },
     );
   }
