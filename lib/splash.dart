@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:nepal_sms/loginPage.dart';
 
 import 'homePage.dart';
@@ -17,10 +16,18 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   _navigate() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
-      });
+      if (FirebaseAuth.instance.currentUser!.uid ==
+          "qGfC1hpVD3cN5g3HW3ajMptvXDB2") {
+        FirebaseAuth.instance.signOut().then((value) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
+        });
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
+        });
+      }
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(context,
@@ -29,10 +36,17 @@ class _SplashState extends State<Splash> {
     }
   }
 
+  // _guestlogout() async {
+  //   print(FirebaseAuth.instance.currentUser);
+  //   print("Logout");
+
+  // }
+
   @override
   void initState() {
     super.initState();
     _navigate();
+    // _guestlogout();
   }
 
   @override
