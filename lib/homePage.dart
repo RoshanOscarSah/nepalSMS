@@ -13,6 +13,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/creditPage.dart';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:nepal_sms/getStorage.dart';
 import 'package:nepal_sms/userPage.dart';
 
 import 'models/firebaseModel.dart';
@@ -156,18 +157,21 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  @override
-  void initState() {
-    checkUser();
-    super.initState();
-  }
-
   final _formKey = GlobalKey<FormState>();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
   TextEditingController messageController = TextEditingController();
   TextEditingController apiController = TextEditingController();
   bool isLoading = false;
+
+  @override
+  void initState() {
+    checkUser();
+    super.initState();
+    fromController.text = GetSetStorage.getFrom();
+    toController.text = GetSetStorage.getTo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -575,8 +579,7 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                     TextFormField(
                                                       maxLength: 10,
-                                                      inputFormatters: <
-                                                          TextInputFormatter>[
+                                                      inputFormatters: <TextInputFormatter>[
                                                         // for below version 2 use this
                                                         FilteringTextInputFormatter
                                                             .allow(RegExp(
@@ -714,6 +717,13 @@ class _HomePageState extends State<HomePage> {
                                                         onTap: isLoading
                                                             ? () {}
                                                             : () async {
+                                                                GetSetStorage.setFrom(
+                                                                    fromController
+                                                                        .text);
+                                                                GetSetStorage.setTo(
+                                                                    toController
+                                                                        .text);
+
                                                                 if (_formKey
                                                                     .currentState!
                                                                     .validate()) {
