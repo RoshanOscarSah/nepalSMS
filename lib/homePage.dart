@@ -1,11 +1,13 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, deprecated_member_use
 
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +17,9 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/getStorage.dart';
 import 'package:nepal_sms/userPage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import 'emergency.dart';
 import 'models/firebaseModel.dart';
 import 'helper.dart';
 
@@ -27,6 +31,147 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void dialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            content: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white.withOpacity(0.8),
+                    Colors.white.withOpacity(0.7),
+                  ],
+                  begin: AlignmentDirectional.topStart,
+                  end: AlignmentDirectional.bottomEnd,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                border: Border.all(
+                  width: 1.5,
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+              height: 170,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Sure you want to send EMERGENCY SMS?",
+                            style: TextStyle(
+                                color: Colors.redAccent,
+                                fontWeight: FontWeight.w900)),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                Color.fromARGB(255, 255, 169, 48),
+                              )),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 150,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                  Color.fromARGB(255, 255, 169, 48),
+                                )),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  if (GetSetStorage.getEmergencyContact1() ==
+                                          "" ||
+                                      GetSetStorage.getEmergencyContact2() ==
+                                          "") {
+                                    Get.to(EmergencyPage());
+                                  } else {
+                                    var connectivityResult =
+                                        await (Connectivity()
+                                            .checkConnectivity());
+                                    print(connectivityResult);
+                                    if (connectivityResult ==
+                                            ConnectivityResult.mobile ||
+                                        connectivityResult ==
+                                            ConnectivityResult.wifi) {
+                                      print("On internet");
+                                      sendEmergencySms();
+                                    } else {
+                                      print("nowLocation");
+                                      print(GetSetStorage.getLocation());
+                                      print("nowLocation");
+
+                                      String emergencyContact1 =
+                                          GetSetStorage.getEmergencyContact1();
+                                      String emergencyContact2 =
+                                          GetSetStorage.getEmergencyContact2();
+                                      var emergencyLocation = "";
+                                      const emergencyMessage =
+                                          "Emergency%20:%20I%20got%20in%20accident.%20Call%20for%20help.%20";
+                                      if (GetSetStorage.getLocation() == "") {
+                                        emergencyLocation = "";
+                                      } else {
+                                        emergencyLocation =
+                                            "Location%20:%20http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
+                                      }
+
+                                      if (Platform.isAndroid) {
+                                        var uri =
+                                            'sms:$emergencyContact1,$emergencyContact2?body=${emergencyMessage + emergencyLocation}';
+                                        await launch(uri);
+                                      } else if (Platform.isIOS) {
+                                        // iOS
+                                        var uri =
+                                            'sms:$emergencyContact1,$emergencyContact2&body=${emergencyMessage + emergencyLocation}';
+                                        await launch(uri);
+                                      }
+                                    }
+                                  }
+                                },
+                                child: Text("Send",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.comfortaa(
+                                      textStyle: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w900,
+                                          color: Colors.white),
+                                    )),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   checkUser() async {
     var docRef = FirebaseFirestore.instance
         .collection("users")
@@ -101,18 +246,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   sendSms() async {
-    final response = await http.get(
-        // ignore: prefer_interpolation_to_compose_strings
-        ///smsnepal/sendmessage/:from/:to/:message
-        Uri.parse("https://cylinder.eachut.com/smsnepal/sendmessage/" +
-            "${fromController.text + "(" + FirebaseAuth.instance.currentUser!.email.toString() + ")"}/" +
-            "${toController.text}/" +
-            "${messageController.text}"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          /* 'Authorization': 'Bearer $token', */
-        });
+    final response = await http.post(
+      Uri.parse("https://cylinder.eachut.com/smsnepal/sendmessage/"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode({
+        'from':
+            "${fromController.text + "(" + FirebaseAuth.instance.currentUser!.email.toString() + ")"}",
+        'to': "${toController.text}",
+        'message': "${messageController.text}"
+      }),
+    );
     var value = json.decode(response.body);
     print("dajkgsfuyadsbivfuydsavf");
     print(value);
@@ -157,6 +303,41 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  sendEmergencySms() async {
+    print("objffect");
+    final response = await http.post(
+      Uri.parse("https://cylinder.eachut.com/smsnepal/sendmessage"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode({
+        'from': FirebaseAuth.instance.currentUser!.email.toString(),
+        'to': GetSetStorage.getEmergencyContact1() +
+            "," +
+            GetSetStorage.getEmergencyContact2(),
+        'message':
+            "Emergency : I got in accident. Call for help. Location : http://www.google.com/maps/place/${GetSetStorage.getLocation()}"
+      }),
+    );
+    var value = json.decode(response.body);
+
+    if (value["success"] == true) {
+      Helper.DialogueHelper(
+          context, value["message"], value["data"]["response"]);
+
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      Helper.DialogueHelper(
+          context, value["message"], value["data"]["response"]);
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
@@ -164,8 +345,19 @@ class _HomePageState extends State<HomePage> {
   TextEditingController apiController = TextEditingController();
   bool isLoading = false;
 
+  getCurrentAddress() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position.latitude.toString());
+    GetSetStorage.setLocation(
+        position.latitude.toString() + "," + position.longitude.toString());
+  }
+
+  requestPermission() async {}
+
   @override
   void initState() {
+    requestPermission();
     checkUser();
     super.initState();
     fromController.text = GetSetStorage.getFrom();
@@ -306,105 +498,112 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     height: 50,
                                     width: 150,
-                                    child: StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('users')
-                                          .where("id",
-                                              isEqualTo: FirebaseAuth
-                                                  .instance.currentUser!.uid)
-                                          .snapshots(),
-                                      builder: (ctx, streamSnapshot) {
-                                        if (streamSnapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                              child: LoadingAnimationWidget
-                                                  .hexagonDots(
-                                            color:
-                                                Colors.black.withOpacity(0.7),
-                                            size: 30,
-                                          ));
-                                        }
-                                        final _blogs =
-                                            streamSnapshot.data?.docs as List;
-                                        return _blogs.isEmpty
-                                            ? Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        print("gift Shop");
+                                        Get.to(CreditPage(
+                                            pageControllerR: 0,
+                                            value: const ["Store", "History"]));
+                                      },
+                                      child: StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .where("id",
+                                                isEqualTo: FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                            .snapshots(),
+                                        builder: (ctx, streamSnapshot) {
+                                          if (streamSnapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
                                                 child: LoadingAnimationWidget
                                                     .hexagonDots(
-                                                color: Colors.black
-                                                    .withOpacity(0.7),
-                                                size: 30,
-                                              ))
-                                            : ListView.builder(
-                                                padding: EdgeInsets.zero,
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const NeverScrollableScrollPhysics(),
-                                                itemCount: 1,
-                                                itemBuilder: (ctx, index) {
-                                                  final UserModel _userData =
-                                                      UserModel.fromJson(Map<
-                                                              String,
-                                                              dynamic>.from(
-                                                          _blogs[index]
-                                                              .data()));
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                              size: 30,
+                                            ));
+                                          }
+                                          final _blogs =
+                                              streamSnapshot.data?.docs as List;
+                                          return _blogs.isEmpty
+                                              ? Center(
+                                                  child: LoadingAnimationWidget
+                                                      .hexagonDots(
+                                                  color: Colors.black
+                                                      .withOpacity(0.7),
+                                                  size: 30,
+                                                ))
+                                              : ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount: 1,
+                                                  itemBuilder: (ctx, index) {
+                                                    final UserModel _userData =
+                                                        UserModel.fromJson(Map<
+                                                                String,
+                                                                dynamic>.from(
+                                                            _blogs[index]
+                                                                .data()));
 
-                                                  return Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                          "${_userData.credit} SMS",
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: GoogleFonts
-                                                              .comfortaa(
-                                                            textStyle:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w900,
-                                                                    color: Color
-                                                                        .fromARGB(
-                                                                            255,
-                                                                            37,
-                                                                            0,
-                                                                            0)),
-                                                          )),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      IconButton(
-                                                          onPressed: () {
-                                                            print("gift Shop");
-                                                            Get.to(CreditPage(
-                                                                pageControllerR:
-                                                                    0,
-                                                                value: const [
-                                                                  "Store",
-                                                                  "History"
-                                                                ]));
-                                                          },
-                                                          icon: Icon(
-                                                            Icons
-                                                                .card_giftcard_rounded,
-                                                            color:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    255,
-                                                                    154,
-                                                                    13),
-                                                          ))
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                      },
+                                                    return Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            "${_userData.credit} SMS",
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            style: GoogleFonts
+                                                                .comfortaa(
+                                                              textStyle: const TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w900,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          37,
+                                                                          0,
+                                                                          0)),
+                                                            )),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              print(
+                                                                  "gift Shop");
+                                                              Get.to(CreditPage(
+                                                                  pageControllerR:
+                                                                      0,
+                                                                  value: const [
+                                                                    "Store",
+                                                                    "History"
+                                                                  ]));
+                                                            },
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .card_giftcard_rounded,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      255,
+                                                                      154,
+                                                                      13),
+                                                            ))
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                        },
+                                      ),
                                     ),
                                   )))),
                     ],
@@ -841,6 +1040,19 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(
                 Icons.person_sharp,
                 color: Color.fromARGB(255, 255, 154, 13),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 30,
+            top: 50,
+            child: IconButton(
+              onPressed: () async {
+                dialog();
+              },
+              icon: const Icon(
+                Icons.emergency,
+                color: Colors.redAccent,
               ),
             ),
           ),

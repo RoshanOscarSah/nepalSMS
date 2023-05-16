@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:nepal_sms/emergency.dart';
 import 'package:nepal_sms/loginPage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -33,7 +34,6 @@ class _UserPageState extends State<UserPage> {
     var email = googleUser!.email;
     var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
     if (methods.contains('google.com')) {
-
       FirebaseAuth.instance.currentUser;
 
       await FirebaseAuth.instance.currentUser!.delete().then((value) {
@@ -753,6 +753,19 @@ class _UserPageState extends State<UserPage> {
           ),
           Positioned(
             right: 30,
+            top: 50,
+            child: IconButton(
+              onPressed: () {
+                Get.to(EmergencyPage());
+              },
+              icon: const Icon(
+                Icons.emergency,
+                color: Colors.redAccent,
+              ),
+            ),
+          ),
+          Positioned(
+            right: 80,
             top: 50,
             child: IconButton(
               onPressed: () {

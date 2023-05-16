@@ -42,4 +42,34 @@ class GetSetStorage {
     final box = GetStorage();
     box.write("TO", TO);
   }
+
+  static String getLocation() {
+    final box = GetStorage();
+    return box.read("LOCATION") ?? "";
+  }
+
+  static setLocation(String LOCATION) {
+    final box = GetStorage();
+    box.write("LOCATION", LOCATION);
+  }
+
+  static String getEmergencyContact1() {
+    final box = GetStorage();
+    return box.read("EMERGENCYCONTACT1") ?? "";
+  }
+
+  static setEmergencyContact1(String EMERGENCYCONTACT1) {
+    final box = GetStorage();
+    box.write("EMERGENCYCONTACT1", EMERGENCYCONTACT1);
+  }
+
+  static String getEmergencyContact2() {
+    final box = GetStorage();
+    return box.read("EMERGENCYCONTACT2") ?? "";
+  }
+
+  static setEmergencyContact2(String EMERGENCYCONTACT2) {
+    final box = GetStorage();
+    box.write("EMERGENCYCONTACT2", EMERGENCYCONTACT2);
+  }
 }
