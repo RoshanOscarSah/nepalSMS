@@ -53,6 +53,14 @@
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.eachut.nepalsms</string>
+	<key>NSLocationUsageDescription</key>
+	<string>This app need your location to send to your emergency contact</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app need your location to send to your emergency contact</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs location permission to know your current location and share location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs location permission to know your current location and share location.</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>CFBundleURLTypes</key>

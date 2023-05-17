@@ -320,7 +320,7 @@ class _BankingState extends State<Banking> with AutomaticKeepAliveClientMixin {
           color: Colors.black.withOpacity(0.7),
           size: 30,
         ));
-        ;
+        
       },
     );
   }

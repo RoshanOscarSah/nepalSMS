@@ -5,12 +5,10 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esewa_flutter/esewa_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/khalti.dart';
 import 'package:nepal_sms/swippableBox.dart';
 import 'dart:io' show Platform;
 
@@ -655,7 +653,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                /*  SizedBox(
                                                                                   height: 20,
                                                                                 ),
                                                                                 Row(
@@ -780,7 +778,108 @@ class _CreditPageState extends State<CreditPage> {
                                                                                       ],
                                                                                     ),
                                                                                   ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 10,
+                                                                                ),
+                                                                                Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                  children: [
+                                                                                    if (Platform.isIOS)
+                                                                                      InkWell(
+                                                                                        onTap: () {
+                                                                                          Navigator.push(
+                                                                                              context,
+                                                                                              MaterialPageRoute(
+                                                                                                  builder: (context) => KhaltiPayment(
+                                                                                                        amount: _userData.price.toString(),
+                                                                                                        productIdentity: _userData.no_of_sms.toString(),
+                                                                                                        productName: "SMS",
+                                                                                                        productUrl: 'https://eachut.com/',
+                                                                                                        additionalData: {
+                                                                                                          'vendor': 'SMS Nepal',
+                                                                                                          'manufacturer': 'Eachut',
+                                                                                                        },
+                                                                                                      )));
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          height: 40,
+                                                                                          decoration: BoxDecoration(
+                                                                                            gradient: const LinearGradient(
+                                                                                              colors: [
+                                                                                                Colors.blue,
+                                                                                                Colors.blue,
+                                                                                              ],
+                                                                                              begin: AlignmentDirectional.topStart,
+                                                                                              end: AlignmentDirectional.bottomEnd,
+                                                                                            ),
+                                                                                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                                                                            border: Border.all(
+                                                                                              width: 1.5,
+                                                                                              color: Colors.blue,
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Padding(
+                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                            child: Center(
+                                                                                              child: Text("Pay with Appstore",
+                                                                                                  textAlign: TextAlign.left,
+                                                                                                  style: GoogleFonts.comfortaa(
+                                                                                                    textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white),
+                                                                                                  )),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    if (Platform.isAndroid)
+                                                                                      InkWell(
+                                                                                        onTap: () {
+                                                                                          Navigator.push(
+                                                                                              context,
+                                                                                              MaterialPageRoute(
+                                                                                                  builder: (context) => KhaltiPayment(
+                                                                                                        amount: _userData.price.toString(),
+                                                                                                        productIdentity: _userData.no_of_sms.toString(),
+                                                                                                        productName: "SMS",
+                                                                                                        productUrl: 'https://eachut.com/',
+                                                                                                        additionalData: {
+                                                                                                          'vendor': 'SMS Nepal',
+                                                                                                          'manufacturer': 'Eachut',
+                                                                                                        },
+                                                                                                      )));
+                                                                                        },
+                                                                                        child: Container(
+                                                                                          height: 40,
+                                                                                          decoration: BoxDecoration(
+                                                                                            gradient: const LinearGradient(
+                                                                                              colors: [
+                                                                                                Colors.blue,
+                                                                                                Colors.blue,
+                                                                                              ],
+                                                                                              begin: AlignmentDirectional.topStart,
+                                                                                              end: AlignmentDirectional.bottomEnd,
+                                                                                            ),
+                                                                                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                                                                            border: Border.all(
+                                                                                              width: 1.5,
+                                                                                              color: Colors.blue,
+                                                                                            ),
+                                                                                          ),
+                                                                                          child: Padding(
+                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                            child: Center(
+                                                                                              child: Text("Pay with Playstore",
+                                                                                                  textAlign: TextAlign.left,
+                                                                                                  style: GoogleFonts.comfortaa(
+                                                                                                    textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white),
+                                                                                                  )),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                  ],
                                                                                 )
+                                                                               */
                                                                               ],
                                                                             ),
                                                                           ),

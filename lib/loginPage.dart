@@ -15,7 +15,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/homePage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -34,8 +33,11 @@ class _LoginPageState extends State<LoginPage> {
     var email = googleUser!.email;
     var methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
     if (methods.contains('google.com')) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      await (FirebaseAuth.instance.signInWithCredential(credential))
+          .then((value) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      });
     } else {
       var userCredential =
           (await FirebaseAuth.instance.signInWithCredential(credential)).user;
