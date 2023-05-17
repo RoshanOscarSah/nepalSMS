@@ -350,8 +350,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   requestPermission() async {
-    LocationPermission permission;
-    permission = await Geolocator.requestPermission();
   }
 
   @override

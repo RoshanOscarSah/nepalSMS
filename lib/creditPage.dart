@@ -5,12 +5,10 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esewa_flutter/esewa_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/khalti.dart';
 import 'package:nepal_sms/swippableBox.dart';
 import 'dart:io' show Platform;
 
