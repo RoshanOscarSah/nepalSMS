@@ -655,7 +655,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                                     ),
                                                                                   ],
                                                                                 ),
-                                                                                SizedBox(
+                                                                                /*  SizedBox(
                                                                                   height: 20,
                                                                                 ),
                                                                                 Row(
@@ -881,6 +881,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                                       ),
                                                                                   ],
                                                                                 )
+                                                                               */
                                                                               ],
                                                                             ),
                                                                           ),

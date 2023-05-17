@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              width: 150,
+                              width: 135,
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStatePropertyAll(
@@ -102,51 +102,44 @@ class _HomePageState extends State<HomePage> {
                                 )),
                                 onPressed: () async {
                                   Navigator.pop(context);
-                                  if (GetSetStorage.getEmergencyContact1() ==
-                                          "" ||
-                                      GetSetStorage.getEmergencyContact2() ==
-                                          "") {
-                                    Get.to(EmergencyPage());
+
+                                  var connectivityResult = await (Connectivity()
+                                      .checkConnectivity());
+                                  print(connectivityResult);
+                                  if (connectivityResult ==
+                                          ConnectivityResult.mobile ||
+                                      connectivityResult ==
+                                          ConnectivityResult.wifi) {
+                                    print("On internet");
+                                    sendEmergencySms();
                                   } else {
-                                    var connectivityResult =
-                                        await (Connectivity()
-                                            .checkConnectivity());
-                                    print(connectivityResult);
-                                    if (connectivityResult ==
-                                            ConnectivityResult.mobile ||
-                                        connectivityResult ==
-                                            ConnectivityResult.wifi) {
-                                      print("On internet");
-                                      sendEmergencySms();
+                                    print("nowLocation");
+                                    print(GetSetStorage.getLocation());
+                                    print("nowLocation");
+
+                                    String emergencyContact1 =
+                                        GetSetStorage.getEmergencyContact1();
+                                    String emergencyContact2 =
+                                        GetSetStorage.getEmergencyContact2();
+                                    var emergencyLocation = "";
+                                    const emergencyMessage =
+                                        "Emergency%20:%20I%20got%20in%20accident.%20Call%20for%20help.%20";
+                                    if (GetSetStorage.getLocation() == "") {
+                                      emergencyLocation = "";
                                     } else {
-                                      print("nowLocation");
-                                      print(GetSetStorage.getLocation());
-                                      print("nowLocation");
+                                      emergencyLocation =
+                                          "Location%20:%20http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
+                                    }
 
-                                      String emergencyContact1 =
-                                          GetSetStorage.getEmergencyContact1();
-                                      String emergencyContact2 =
-                                          GetSetStorage.getEmergencyContact2();
-                                      var emergencyLocation = "";
-                                      const emergencyMessage =
-                                          "Emergency%20:%20I%20got%20in%20accident.%20Call%20for%20help.%20";
-                                      if (GetSetStorage.getLocation() == "") {
-                                        emergencyLocation = "";
-                                      } else {
-                                        emergencyLocation =
-                                            "Location%20:%20http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
-                                      }
-
-                                      if (Platform.isAndroid) {
-                                        var uri =
-                                            'sms:$emergencyContact1,$emergencyContact2?body=${emergencyMessage + emergencyLocation}';
-                                        await launch(uri);
-                                      } else if (Platform.isIOS) {
-                                        // iOS
-                                        var uri =
-                                            'sms:$emergencyContact1,$emergencyContact2&body=${emergencyMessage + emergencyLocation}';
-                                        await launch(uri);
-                                      }
+                                    if (Platform.isAndroid) {
+                                      var uri =
+                                          'sms:$emergencyContact1,$emergencyContact2?body=${emergencyMessage + emergencyLocation}';
+                                      await launch(uri);
+                                    } else if (Platform.isIOS) {
+                                      // iOS
+                                      var uri =
+                                          'sms:$emergencyContact1,$emergencyContact2&body=${emergencyMessage + emergencyLocation}';
+                                      await launch(uri);
                                     }
                                   }
                                 },
@@ -305,6 +298,9 @@ class _HomePageState extends State<HomePage> {
 
   sendEmergencySms() async {
     print("objffect");
+    var locationMessage = GetSetStorage.getLocation() == ""
+        ? ""
+        : "Location : http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
     final response = await http.post(
       Uri.parse("https://cylinder.eachut.com/smsnepal/sendmessage"),
       headers: {
@@ -317,7 +313,7 @@ class _HomePageState extends State<HomePage> {
             "," +
             GetSetStorage.getEmergencyContact2(),
         'message':
-            "Emergency : I got in accident. Call for help. Location : http://www.google.com/maps/place/${GetSetStorage.getLocation()}"
+            "Emergency : I got in accident. Call for help. $locationMessage"
       }),
     );
     var value = json.decode(response.body);
@@ -353,7 +349,10 @@ class _HomePageState extends State<HomePage> {
         position.latitude.toString() + "," + position.longitude.toString());
   }
 
-  requestPermission() async {}
+  requestPermission() async {
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
+  }
 
   @override
   void initState() {
@@ -1048,7 +1047,12 @@ class _HomePageState extends State<HomePage> {
             top: 50,
             child: IconButton(
               onPressed: () async {
-                dialog();
+                if (GetSetStorage.getEmergencyContact1() == "" ||
+                    GetSetStorage.getEmergencyContact2() == "") {
+                  Get.to(EmergencyPage());
+                } else {
+                  dialog();
+                }
               },
               icon: const Icon(
                 Icons.emergency,

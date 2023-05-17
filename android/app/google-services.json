@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "195266374056-7d47tg8bdc6k210a4hanucnu0s57n44d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eachut.nepalsms",
+            "certificate_hash": "ce755678beed07f92720fb66ed8e889e9cb4f159"
+          }
+        },
+        {
+          "client_id": "195266374056-fqlr0u40bfdtnj17p1ach84a7takjhe8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eachut.nepalsms",
+            "certificate_hash": "f490afdbfa4eb4a610805838edbaf74a180473d5"
+          }
+        },
+        {
           "client_id": "195266374056-4ch6bm8tv82qvmq1en9bhv4ij7aighhp.apps.googleusercontent.com",
           "client_type": 3
         }
