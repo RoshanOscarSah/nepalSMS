@@ -58,9 +58,9 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app need your location to send to your emergency contact</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs location permission to know your current location and share location.</string>
+	<string>This app need your location to send to your emergency contact</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs location permission to know your current location and share location.</string>
+	<string>This app need your location to send to your emergency contact</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>CFBundleURLTypes</key>

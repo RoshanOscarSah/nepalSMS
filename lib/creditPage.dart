@@ -102,7 +102,7 @@ class _CreditPageState extends State<CreditPage> {
   }
 
   inAppPurchase(price, no_of_sms) {
-    esewa();
+    // esewa();
     //if payment success
     addHistory(price: price, no: no_of_sms);
     if (Platform.isAndroid) {
@@ -643,7 +643,8 @@ class _CreditPageState extends State<CreditPage> {
                                                                                         ),
                                                                                         child: Padding(
                                                                                           padding: const EdgeInsets.all(8.0),
-                                                                                          child: Text("RS ${_userData.price}",
+                                                                                          child: Text("Free",
+                                                                                              // RS ${_userData.price}",
                                                                                               textAlign: TextAlign.left,
                                                                                               style: GoogleFonts.comfortaa(
                                                                                                 textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white),

@@ -311,8 +311,7 @@ class _HomePageState extends State<HomePage> {
         position.latitude.toString() + "," + position.longitude.toString());
   }
 
-  requestPermission() async {
-  }
+  requestPermission() async {}
 
   @override
   void initState() {
@@ -1014,41 +1013,41 @@ class _HomePageState extends State<HomePage> {
                   var connectivityResult =
                       await (Connectivity().checkConnectivity());
                   print(connectivityResult);
-                  // if (connectivityResult == ConnectivityResult.mobile ||
-                  //     connectivityResult == ConnectivityResult.wifi) {
-                  //   print("On internet");
-                  //   dialog();
-                  // } else {
-                  print("nowLocation");
-                  print(GetSetStorage.getLocation());
-                  print("nowLocation");
-
-                  String emergencyContact1 =
-                      GetSetStorage.getEmergencyContact1();
-                  String emergencyContact2 =
-                      GetSetStorage.getEmergencyContact2();
-                  var emergencyLocation = "";
-                  const emergencyMessage =
-                      "Emergency%20:%20I%20got%20in%20accident.%20Call%20for%20help.%20";
-                  if (GetSetStorage.getLocation() == "") {
-                    emergencyLocation = "";
+                  if (connectivityResult == ConnectivityResult.mobile ||
+                      connectivityResult == ConnectivityResult.wifi) {
+                    print("On internet");
+                    dialog();
                   } else {
-                    emergencyLocation =
-                        "Location%20:%20http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
-                  }
+                    print("nowLocation");
+                    print(GetSetStorage.getLocation());
+                    print("nowLocation");
 
-                  if (Platform.isAndroid) {
-                    var uri =
-                        'sms:[$emergencyContact1,$emergencyContact2]?body=${emergencyMessage + emergencyLocation}';
-                    await launch(uri);
-                  } else if (Platform.isIOS) {
-                    // iOS
-                    var uri =
-                        // sms://open?addresses=+12223334444,+12223334445?&body=Message%20Line%201%E2%80%A8Message%20Line%202"
-                        'sms:open?addresses=$emergencyContact1,$emergencyContact2?&body=${emergencyMessage + emergencyLocation}';
-                    await launch(uri);
+                    String emergencyContact1 =
+                        GetSetStorage.getEmergencyContact1();
+                    String emergencyContact2 =
+                        GetSetStorage.getEmergencyContact2();
+                    var emergencyLocation = "";
+                    const emergencyMessage =
+                        "Emergency%20:%20I%20got%20in%20accident.%20Call%20for%20help.%20";
+                    if (GetSetStorage.getLocation() == "") {
+                      emergencyLocation = "";
+                    } else {
+                      emergencyLocation =
+                          "Location%20:%20http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
+                    }
+
+                    if (Platform.isAndroid) {
+                      var uri =
+                          'sms:[$emergencyContact1,$emergencyContact2]?body=${emergencyMessage + emergencyLocation}';
+                      await launch(uri);
+                    } else if (Platform.isIOS) {
+                      // iOS
+                      var uri =
+                          // sms://open?addresses=+12223334444,+12223334445?&body=Message%20Line%201%E2%80%A8Message%20Line%202"
+                          'sms:open?addresses=$emergencyContact1,$emergencyContact2?&body=${emergencyMessage + emergencyLocation}';
+                      await launch(uri);
+                    }
                   }
-                  // }
                 }
               },
               icon: const Icon(
