@@ -21,6 +21,16 @@ class _EmergencyPageState extends State<EmergencyPage> {
   TextEditingController contact1Controller = TextEditingController();
   TextEditingController contact2Controller = TextEditingController();
   bool _location = true;
+
+  getCurrentAddress() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position.latitude.toString());
+    print(position.longitude.toString());
+    GetSetStorage.setLocation(
+        position.latitude.toString() + "," + position.longitude.toString());
+  }
+
   checkPermission() async {
     /*   var status1 = await Permission.location.status;
     if (status1 != PermissionStatus.granted) {
@@ -109,6 +119,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
     contact1Controller.text = GetSetStorage.getEmergencyContact1();
     contact2Controller.text = GetSetStorage.getEmergencyContact2();
     checkPermission();
+    getCurrentAddress();
   }
 
   @override
