@@ -504,8 +504,9 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                                           end: AlignmentDirectional
                                                                               .bottomEnd,
                                                                         ),
-                                                                        borderRadius:
-                                                                            const BorderRadius.all(Radius.circular(10)),
+                                                                        borderRadius: const BorderRadius
+                                                                            .all(
+                                                                            Radius.circular(10)),
                                                                         border:
                                                                             Border.all(
                                                                           width:
@@ -552,8 +553,9 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                                           end: AlignmentDirectional
                                                                               .bottomEnd,
                                                                         ),
-                                                                        borderRadius:
-                                                                            const BorderRadius.all(Radius.circular(10)),
+                                                                        borderRadius: const BorderRadius
+                                                                            .all(
+                                                                            Radius.circular(10)),
                                                                         border:
                                                                             Border.all(
                                                                           width:
@@ -594,7 +596,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                           GoogleFonts.comfortaa(
                                                         textStyle:
                                                             const TextStyle(
-                                                                fontSize: 12,
+                                                                fontSize: 8,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w900,
@@ -603,7 +605,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                       ),
                                                     ),
                                                     SizedBox(
-                                                      height: 10,
+                                                      height: 5,
                                                     ),
                                                     Text(
                                                       "Emergency : I got in accident. Call for help.",
@@ -613,7 +615,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                           GoogleFonts.comfortaa(
                                                         textStyle:
                                                             const TextStyle(
-                                                                fontSize: 14,
+                                                                fontSize: 12,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -636,7 +638,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       top: 8.0),
                                                               child: Row(
                                                                 children: [

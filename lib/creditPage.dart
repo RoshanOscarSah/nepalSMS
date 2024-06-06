@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/swippableBox.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
 import 'models/creditModels.dart';
@@ -570,7 +571,8 @@ class _CreditPageState extends State<CreditPage> {
                                                                           .data()));
 
                                                                       return Padding(
-                                                                        padding: const EdgeInsets.symmetric(
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
                                                                             horizontal:
                                                                                 20,
                                                                             vertical:
@@ -621,7 +623,7 @@ class _CreditPageState extends State<CreditPage> {
                                                                                         ),
                                                                                       ],
                                                                                     ),
-                                                                                    InkWell(
+                                                                                    /* InkWell(
                                                                                       onTap: () {
                                                                                         inAppPurchase(_userData.price, _userData.no_of_sms);
                                                                                       },
@@ -644,6 +646,40 @@ class _CreditPageState extends State<CreditPage> {
                                                                                         child: Padding(
                                                                                           padding: const EdgeInsets.all(8.0),
                                                                                           child: Text("RS ${_userData.price}",
+                                                                                              textAlign: TextAlign.left,
+                                                                                              style: GoogleFonts.comfortaa(
+                                                                                                textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white),
+                                                                                              )),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ), */
+                                                                                    InkWell(
+                                                                                      onTap: () async {
+                                                                                        String url = "mailto:admin@eachut.com";
+                                                                                        final Uri open = Uri.parse(url);
+                                                                                        if (!await launchUrl(open)) {
+                                                                                          throw Exception('Could not launch $url');
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          gradient: const LinearGradient(
+                                                                                            colors: [
+                                                                                              Colors.green,
+                                                                                              Colors.green,
+                                                                                            ],
+                                                                                            begin: AlignmentDirectional.topStart,
+                                                                                            end: AlignmentDirectional.bottomEnd,
+                                                                                          ),
+                                                                                          borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                                                                          border: Border.all(
+                                                                                            width: 1.5,
+                                                                                            color: Colors.green,
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: Text("Email to purchase",
                                                                                               textAlign: TextAlign.left,
                                                                                               style: GoogleFonts.comfortaa(
                                                                                                 textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white),
@@ -1163,7 +1199,8 @@ class _CreditPageState extends State<CreditPage> {
                                                                               .length <
                                                                           1
                                                                       ? Padding(
-                                                                          padding: const EdgeInsets.symmetric(
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
                                                                               horizontal: 20,
                                                                               vertical: 5),
                                                                           child:
