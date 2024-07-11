@@ -30,6 +30,8 @@ class MyApp extends StatefulWidget {
 //TODO responsiveness while landscape
 //TODO firebase maa not null use garaeko hataunae
 //TODO account delete garda recent login chahincha
+//TODO email to purchase ko sato inapppurchase
+//TODO purchase garaeko rs $ or aru tay app maa herinu paryoo
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {

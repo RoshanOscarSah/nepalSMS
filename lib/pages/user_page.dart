@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -730,7 +729,7 @@ class _UserPageState extends State<UserPage> {
                 Get.to(() => EmergencyPage());
               },
               icon: const Icon(
-                Icons.emergency,
+                Icons.contact_emergency,
                 color: Colors.redAccent,
               ),
             ),

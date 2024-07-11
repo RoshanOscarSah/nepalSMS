@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -298,7 +297,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                         color: Colors.white.withOpacity(0.5),
                                       ),
                                     ),
-                                    height: 355,
+                                    height: 385,
                                     width:
                                         MediaQuery.of(context).size.width - 50,
                                     child: Center(
