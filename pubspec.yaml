@@ -38,21 +38,20 @@ dependencies:
   http: ^0.13.5
   google_fonts: ^4.0.4
   loading_animation_widget: ^1.2.0+2
-  connectivity_plus: ^3.0.3
+  connectivity_plus: ^6.0.3
   get: ^4.6.6
-  firebase_core: ^2.6.1
-  firebase_auth: ^4.2.8
+  firebase_core: ^3.2.0
+  firebase_auth: ^5.1.2
   google_sign_in: ^6.0.0
-  cloud_firestore: ^4.4.2
+  cloud_firestore: ^5.1.0
   sign_in_with_apple: ^4.3.0
-  esewa_flutter: ^1.1.2
-  khalti: ^1.1.0
+  # esewa_flutter: ^1.1.2
   url_launcher: ^6.1.10
-  in_app_purchase: ^3.1.5
+  # in_app_purchase: ^3.1.5
   flutter_sms: ^2.3.3
   permission_handler: ^10.0.0
   app_settings: ^4.1.8
-  geolocator: ^9.0.2
+  geolocator: ^12.0.0
   # geocoding: ^2.1.0
 
 dev_dependencies:
@@ -64,7 +63,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:

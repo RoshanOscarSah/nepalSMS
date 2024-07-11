@@ -1,4 +1,3 @@
-// ignore_for_file: file_names, deprecated_member_use
 
 import 'dart:io';
 import 'dart:ui';
@@ -12,16 +11,16 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/creditPage.dart';
+import 'package:nepal_sms/pages/credit_page.dart';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:nepal_sms/getStorage.dart';
-import 'package:nepal_sms/userPage.dart';
+import 'package:nepal_sms/pages/user_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'emergency.dart';
-import 'models/firebaseModel.dart';
-import 'helper.dart';
+import 'emergency_page.dart';
+import '../models/firebaseModel.dart';
+import '../helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -350,6 +349,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   requestPermission() async {
+   
   }
 
   @override

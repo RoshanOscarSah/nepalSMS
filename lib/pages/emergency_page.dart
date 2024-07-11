@@ -1,4 +1,3 @@
-// ignore_for_file: file_names, unused_local_variable
 
 import 'dart:ui';
 
@@ -644,7 +643,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                                 children: [
                                                                   Expanded(
                                                                     child: Text(
-                                                                      "Enable location access to send location too",
+                                                                      "Enable location access to send location too..",
                                                                       textAlign:
                                                                           TextAlign
                                                                               .left,
@@ -661,9 +660,10 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                                   ),
                                                                   Icon(
                                                                     Icons
-                                                                        .ios_share,
+                                                                        .settings_applications_sharp,
                                                                     color: Colors
                                                                         .redAccent,
+                                                                    size: 30,
                                                                   )
                                                                 ],
                                                               ),

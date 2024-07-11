@@ -1,9 +1,7 @@
-// ignore_for_file: file_names, must_be_immutable, unnecessary_cast, non_constant_identifier_names
 
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esewa_flutter/esewa_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,9 +11,9 @@ import 'package:nepal_sms/swippableBox.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
-import 'models/creditModels.dart';
-import 'models/firebaseModel.dart';
-import 'models/purchasedModels.dart';
+import '../models/creditModels.dart';
+import '../models/firebaseModel.dart';
+import '../models/purchasedModels.dart';
 
 class CreditPage extends StatefulWidget {
   int pageControllerR;
@@ -68,7 +66,7 @@ class _CreditPageState extends State<CreditPage> {
     });
   }
 
-  esewa() async {
+ /*  esewa() async {
     //for dev
     final config = ESewaConfig.dev(
       amt: 100,
@@ -101,9 +99,9 @@ class _CreditPageState extends State<CreditPage> {
       print('Payment failed or cancelled. Error: $error');
     }
   }
-
+ */
   inAppPurchase(price, no_of_sms) {
-    esewa();
+    // esewa();
     //if payment success
     addHistory(price: price, no: no_of_sms);
     if (Platform.isAndroid) {

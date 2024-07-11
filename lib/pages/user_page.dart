@@ -1,4 +1,3 @@
-// ignore_for_file: file_names
 
 import 'dart:io';
 import 'dart:ui';
@@ -12,11 +11,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/emergency.dart';
-import 'package:nepal_sms/loginPage.dart';
+import 'package:nepal_sms/pages/emergency_page.dart';
+import 'package:nepal_sms/pages/login_page.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import 'models/history_model.dart';
+import '../models/history_model.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});

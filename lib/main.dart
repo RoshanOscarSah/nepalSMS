@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'firebase_options.dart';
-import 'splash.dart';
+import 'pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       ),
       title: 'nepalSMS',
       debugShowCheckedModeBanner: false,
-      home: const Splash(),
+      home: const SplashPage(),
     );
   }
 }

@@ -1,19 +1,17 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:nepal_sms/loginPage.dart';
+import 'package:nepal_sms/pages/login_page.dart';
 
-import 'homePage.dart';
+import 'home_page.dart';
 
-class Splash extends StatefulWidget {
-  const Splash({super.key});
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
 
   @override
-  State<Splash> createState() => _SplashState();
+  State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashPageState extends State<SplashPage> {
   _navigate() async {
     if (FirebaseAuth.instance.currentUser != null) {
       if (FirebaseAuth.instance.currentUser!.uid ==

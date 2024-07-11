@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, use_build_context_synchronously
-
 import 'dart:io';
 import 'dart:ui';
 
@@ -12,7 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/homePage.dart';
+import 'package:nepal_sms/pages/home_page.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginPage extends StatefulWidget {
@@ -542,7 +540,7 @@ class _LoginPageState extends State<LoginPage> {
                                               },
                                               child: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 40,
                                                       vertical: 10),
                                                   child: ClipRRect(
@@ -572,7 +570,7 @@ class _LoginPageState extends State<LoginPage> {
                                                               ),
                                                               borderRadius:
                                                                   const BorderRadius
-                                                                          .all(
+                                                                      .all(
                                                                       Radius.circular(
                                                                           10)),
                                                               border:
