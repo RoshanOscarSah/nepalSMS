@@ -1,4 +1,4 @@
-
+import 'dart:io' show Platform;
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,18 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/swippableBox.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' show Platform;
 
-import '../models/creditModels.dart';
-import '../models/firebaseModel.dart';
-import '../models/purchasedModels.dart';
+import 'package:nepal_sms/models/creditModels.dart';
+import 'package:nepal_sms/models/firebaseModel.dart';
+import 'package:nepal_sms/models/purchasedModels.dart';
+import 'package:nepal_sms/swippableBox.dart';
 
 class CreditPage extends StatefulWidget {
-  int pageControllerR;
-  List<String>? value = [];
-  CreditPage({super.key, this.pageControllerR = 0, this.value});
+  final int pageControllerR;
+  final List<String> value;
+  CreditPage(
+      {super.key,
+      this.pageControllerR = 0,
+      this.value = const ["Store", "History"]});
 
   @override
   State<CreditPage> createState() => _CreditPageState();
@@ -31,7 +33,7 @@ class _CreditPageState extends State<CreditPage> {
 
   @override
   initState() {
-    head = widget.value!.length < 1 ? head : widget.value!;
+    head = widget.value.length < 1 ? head : widget.value;
     super.initState();
     _pageController = widget.pageControllerR == 0
         ? PageController(initialPage: 0, keepPage: true, viewportFraction: 1)
@@ -66,7 +68,7 @@ class _CreditPageState extends State<CreditPage> {
     });
   }
 
- /*  esewa() async {
+  /*  esewa() async {
     //for dev
     final config = ESewaConfig.dev(
       amt: 100,
@@ -277,9 +279,9 @@ class _CreditPageState extends State<CreditPage> {
                                                     size: 20,
                                                   ));
                                                 }
-                                                final _blogs =
+                                                final List _blogs =
                                                     streamSnapshot.data?.docs ??
-                                                        [] as List;
+                                                        [];
                                                 return ListView.builder(
                                                   padding: EdgeInsets.zero,
                                                   shrinkWrap: true,

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'dart:ui';
 
@@ -10,8 +12,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:nepal_sms/pages/home_page.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+import 'package:nepal_sms/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,6 +25,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   Future<void> signInGoogle() async {
+    setState(() {
+      isLoading = true;
+    });
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
@@ -33,6 +39,9 @@ class _LoginPageState extends State<LoginPage> {
     if (methods.contains('google.com')) {
       await (FirebaseAuth.instance.signInWithCredential(credential))
           .then((value) {
+        setState(() {
+          isLoading = false;
+        });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
       });
@@ -48,6 +57,9 @@ class _LoginPageState extends State<LoginPage> {
         "credit": 1,
         "created_on": DateTime.now(),
       });
+      setState(() {
+        isLoading = false;
+      });
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
@@ -58,13 +70,15 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithEmailAndPassword(
             email: "test@gmail.com", password: "12345678")
         .then((value) {
-      Get.to(HomePage());
+      Get.to(()=>HomePage());
     });
   }
  */
 
   Future<void> signInApple() async {
-    print("apple");
+    setState(() {
+      isLoading = true;
+    });
     final credential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
@@ -111,7 +125,10 @@ class _LoginPageState extends State<LoginPage> {
     var methods =
         await FirebaseAuth.instance.fetchSignInMethodsForEmail(email!);
     if (methods.contains('apple.com')) {
-      Get.to(HomePage());
+      setState(() {
+        isLoading = false;
+      });
+      Get.to(() => HomePage());
     } else {
       FirebaseFirestore.instance
           .collection("users")
@@ -122,7 +139,10 @@ class _LoginPageState extends State<LoginPage> {
         "credit": 1,
         "created_on": DateTime.now(),
       }).then((value) {
-        Get.to(HomePage());
+        setState(() {
+          isLoading = false;
+        });
+        Get.to(() => HomePage());
       });
     }
 
@@ -161,122 +181,24 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
+      body: Stack(
+        children: [
+          ListView(
+            padding: EdgeInsets.zero,
             children: [
-              Expanded(
-                flex: 2,
-                child: InkWell(
-                  onDoubleTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.transparent,
-                            content: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.white.withOpacity(0.8),
-                                    Colors.white.withOpacity(0.7),
-                                  ],
-                                  begin: AlignmentDirectional.topStart,
-                                  end: AlignmentDirectional.bottomEnd,
-                                ),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                border: Border.all(
-                                  width: 1.5,
-                                  color: Colors.white.withOpacity(0.8),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(38.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text("Developer",
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.comfortaa(
-                                            textStyle: const TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color.fromARGB(
-                                                    255, 37, 0, 0)),
-                                          )),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Center(
-                                      child: Text("Roshan Sah",
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.comfortaa(
-                                            textStyle: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color.fromARGB(
-                                                    255, 37, 0, 0)),
-                                          )),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Center(
-                                      child: Text("Prasis Rijal",
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.comfortaa(
-                                            textStyle: const TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w900,
-                                                color: Color.fromARGB(
-                                                    255, 37, 0, 0)),
-                                          )),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }).then((value) {
-                      setState(() {});
-                    });
-                  },
-                  child: SizedBox(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width,
-                      child: Image.asset(
-                        "./assets/sms.png",
-                        fit: BoxFit.cover,
-                      )),
-                ),
-              ),
-              Expanded(
-                flex: 5,
-                child: Stack(
-                  children: [
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: Image.asset(
-                          "./assets/sms.png",
-                          fit: BoxFit.cover,
-                        )),
-                    ClipRRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 20),
-                        child: Container(
+              InkWell(
+                onDoubleTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.transparent,
+                          content: Container(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
                                 colors: [
-                                  Colors.white.withOpacity(0.2),
-                                  Colors.white.withOpacity(0.4),
+                                  Colors.white.withOpacity(0.8),
+                                  Colors.white.withOpacity(0.7),
                                 ],
                                 begin: AlignmentDirectional.topStart,
                                 end: AlignmentDirectional.bottomEnd,
@@ -285,268 +207,182 @@ class _LoginPageState extends State<LoginPage> {
                                   const BorderRadius.all(Radius.circular(10)),
                               border: Border.all(
                                 width: 1.5,
-                                color: Colors.white.withOpacity(0.1),
+                                color: Colors.white.withOpacity(0.8),
                               ),
                             ),
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 40,
-                                ),
-                                Center(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("Login",
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.comfortaa(
-                                        textStyle: const TextStyle(
-                                            fontSize: 40,
-                                            fontWeight: FontWeight.w900,
-                                            color:
-                                                Color.fromARGB(255, 37, 0, 0)),
-                                      )),
-                                )),
-                                Center(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text("or signup with",
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.comfortaa(
-                                        textStyle: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            color:
-                                                Color.fromARGB(255, 37, 0, 0)),
-                                      )),
-                                )),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ClipRRect(
-                                  child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 15, sigmaY: 20),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            Colors.white.withOpacity(0.2),
-                                            Colors.white.withOpacity(0.4),
-                                          ],
-                                          begin: AlignmentDirectional.topStart,
-                                          end: AlignmentDirectional.bottomEnd,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
-                                        border: Border.all(
-                                          width: 1.5,
-                                          color: Colors.white.withOpacity(0.5),
-                                        ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(38.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text("Developer",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.comfortaa(
+                                          textStyle: const TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.w900,
+                                              color: Color.fromARGB(
+                                                  255, 37, 0, 0)),
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Center(
+                                    child: Text("Roshan Sah",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.comfortaa(
+                                          textStyle: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w900,
+                                              color: Color.fromARGB(
+                                                  255, 37, 0, 0)),
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Center(
+                                    child: Text("Prasis Rijal",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.comfortaa(
+                                          textStyle: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w900,
+                                              color: Color.fromARGB(
+                                                  255, 37, 0, 0)),
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                },
+                child: SizedBox(
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: Image.asset(
+                      "./assets/sms.png",
+                      fit: BoxFit.cover,
+                    )),
+              ),
+              Stack(
+                children: [
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height >= 700
+                          ? MediaQuery.of(context).size.height - 300
+                          : 500,
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.asset(
+                        "./assets/sms.png",
+                        fit: BoxFit.cover,
+                      )),
+                  ClipRRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 20),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.white.withOpacity(0.2),
+                                Colors.white.withOpacity(0.4),
+                              ],
+                              begin: AlignmentDirectional.topStart,
+                              end: AlignmentDirectional.bottomEnd,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(
+                              width: 1.5,
+                              color: Colors.white.withOpacity(0.1),
+                            ),
+                          ),
+                          height: MediaQuery.of(context).size.height >= 700
+                              ? MediaQuery.of(context).size.height - 300
+                              : 500,
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Center(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("Login",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.comfortaa(
+                                      textStyle: const TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.w900,
+                                          color: Color.fromARGB(255, 37, 0, 0)),
+                                    )),
+                              )),
+                              Center(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("or signup with",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.comfortaa(
+                                      textStyle: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: Color.fromARGB(255, 37, 0, 0)),
+                                    )),
+                              )),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              ClipRRect(
+                                child: BackdropFilter(
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 15, sigmaY: 20),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white.withOpacity(0.2),
+                                          Colors.white.withOpacity(0.4),
+                                        ],
+                                        begin: AlignmentDirectional.topStart,
+                                        end: AlignmentDirectional.bottomEnd,
                                       ),
-                                      width: MediaQuery.of(context).size.width -
-                                          50,
-                                      child: Center(
-                                        child: Column(
-                                          children: [
-                                            const SizedBox(
-                                              height: 40,
-                                            ),
-                                            /* if (Platform.isAndroid)
-                                              InkWell(
-                                                onTap: () {
-                                                  signInGuest();
-                                                },
-                                                child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 40,
-                                                        vertical: 10),
-                                                    child: ClipRRect(
-                                                        child: BackdropFilter(
-                                                            filter: ImageFilter
-                                                                .blur(
-                                                                    sigmaX: 15,
-                                                                    sigmaY: 20),
-                                                            child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                gradient:
-                                                                    LinearGradient(
-                                                                  colors: [
-                                                                    Colors.white
-                                                                        .withOpacity(
-                                                                            0.8),
-                                                                    Colors.white
-                                                                        .withOpacity(
-                                                                            0.7),
-                                                                  ],
-                                                                  begin: AlignmentDirectional
-                                                                      .topStart,
-                                                                  end: AlignmentDirectional
-                                                                      .bottomEnd,
-                                                                ),
-                                                                borderRadius:
-                                                                    const BorderRadius
-                                                                            .all(
-                                                                        Radius.circular(
-                                                                            10)),
-                                                                border:
-                                                                    Border.all(
-                                                                  width: 1.5,
-                                                                  color: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.5),
-                                                                ),
-                                                              ),
-                                                              height: 45,
-                                                              width: 250,
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Icon(Icons
-                                                                      .verified_user_rounded),
-                                                                  const SizedBox(
-                                                                    width: 30,
-                                                                  ),
-                                                                  Center(
-                                                                    child: isLoading
-                                                                        ? LoadingAnimationWidget.hexagonDots(
-                                                                            color:
-                                                                                Colors.black.withOpacity(0.7),
-                                                                            size:
-                                                                                30,
-                                                                          )
-                                                                        : Text("Guest Login",
-                                                                            textAlign: TextAlign.left,
-                                                                            style: GoogleFonts.comfortaa(
-                                                                              textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color.fromARGB(255, 37, 0, 0)),
-                                                                            )),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            )))),
-                                              ),
- */
-                                            // if (Platform.isIOS)
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 40,
-                                                      vertical: 10),
-                                              child: SizedBox(
-                                                width: 250,
-                                                child: SignInWithAppleButton(
-                                                    onPressed: () {
-                                                  signInApple();
-                                                }),
-                                              ),
-                                            ),
-                                            // InkWell(
-                                            //   onTap: () {
-                                            //     apple();
-                                            //   },
-                                            //   child: Padding(
-                                            //       padding: const EdgeInsets
-                                            //               .symmetric(
-                                            //           horizontal: 40,
-                                            //           vertical: 0),
-                                            //       child: ClipRRect(
-                                            //           child: BackdropFilter(
-                                            //               filter:
-                                            //                   ImageFilter.blur(
-                                            //                       sigmaX: 15,
-                                            //                       sigmaY: 20),
-                                            //               child: Container(
-                                            //                 decoration:
-                                            //                     BoxDecoration(
-                                            //                   gradient:
-                                            //                       LinearGradient(
-                                            //                     colors: [
-                                            //                       Colors.white
-                                            //                           .withOpacity(
-                                            //                               0.8),
-                                            //                       Colors.white
-                                            //                           .withOpacity(
-                                            //                               0.7),
-                                            //                     ],
-                                            //                     begin:
-                                            //                         AlignmentDirectional
-                                            //                             .topStart,
-                                            //                     end: AlignmentDirectional
-                                            //                         .bottomEnd,
-                                            //                   ),
-                                            //                   borderRadius:
-                                            //                       const BorderRadius
-                                            //                               .all(
-                                            //                           Radius.circular(
-                                            //                               10)),
-                                            //                   border:
-                                            //                       Border.all(
-                                            //                     width: 1.5,
-                                            //                     color: Colors
-                                            //                         .white
-                                            //                         .withOpacity(
-                                            //                             0.5),
-                                            //                   ),
-                                            //                 ),
-                                            //                 height: 50,
-                                            //                 width: 250,
-                                            //                 child: Row(
-                                            //                   mainAxisAlignment:
-                                            //                       MainAxisAlignment
-                                            //                           .center,
-                                            //                   children: [
-                                            //                     const Icon(Icons
-                                            //                         .apple),
-                                            //                     const SizedBox(
-                                            //                       width: 30,
-                                            //                     ),
-                                            //                     Center(
-                                            //                       child: isLoading
-                                            //                           ? LoadingAnimationWidget.hexagonDots(
-                                            //                               color: Colors
-                                            //                                   .black
-                                            //                                   .withOpacity(0.7),
-                                            //                               size:
-                                            //                                   30,
-                                            //                             )
-                                            //                           : Text("Apple  ",
-                                            //                               textAlign: TextAlign.left,
-                                            //                               style: GoogleFonts.comfortaa(
-                                            //                                 textStyle: const TextStyle(
-                                            //                                     fontSize: 16,
-                                            //                                     fontWeight: FontWeight.w900,
-                                            //                                     color: Color.fromARGB(255, 37, 0, 0)),
-                                            //                               )),
-                                            //                     ),
-                                            //                   ],
-                                            //                 ),
-                                            //               )))),
-                                            // ),
-                                            // if (Platform.isIOS)
-                                            SizedBox(
-                                              height: 20,
-                                            ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      border: Border.all(
+                                        width: 1.5,
+                                        color: Colors.white.withOpacity(0.5),
+                                      ),
+                                    ),
+                                    width:
+                                        MediaQuery.of(context).size.width - 50,
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          const SizedBox(
+                                            height: 40,
+                                          ),
+                                          /* if (Platform.isAndroid)
                                             InkWell(
                                               onTap: () {
-                                                signInGoogle().then((value) {
-                                                  print("Sign In Vayo");
-                                                });
+                                                signInGuest();
                                               },
                                               child: Padding(
                                                   padding: const EdgeInsets
-                                                      .symmetric(
+                                                          .symmetric(
                                                       horizontal: 40,
                                                       vertical: 10),
                                                   child: ClipRRect(
                                                       child: BackdropFilter(
-                                                          filter:
-                                                              ImageFilter.blur(
+                                                          filter: ImageFilter
+                                                              .blur(
                                                                   sigmaX: 15,
                                                                   sigmaY: 20),
                                                           child: Container(
@@ -562,15 +398,14 @@ class _LoginPageState extends State<LoginPage> {
                                                                       .withOpacity(
                                                                           0.7),
                                                                 ],
-                                                                begin:
-                                                                    AlignmentDirectional
-                                                                        .topStart,
+                                                                begin: AlignmentDirectional
+                                                                    .topStart,
                                                                 end: AlignmentDirectional
                                                                     .bottomEnd,
                                                               ),
                                                               borderRadius:
                                                                   const BorderRadius
-                                                                      .all(
+                                                                          .all(
                                                                       Radius.circular(
                                                                           10)),
                                                               border:
@@ -589,54 +424,248 @@ class _LoginPageState extends State<LoginPage> {
                                                                   MainAxisAlignment
                                                                       .center,
                                                               children: [
-                                                                Image.asset(
-                                                                  "./assets/google.png",
-                                                                  height: 25,
-                                                                ),
+                                                                Icon(Icons
+                                                                    .verified_user_rounded),
                                                                 const SizedBox(
                                                                   width: 30,
                                                                 ),
                                                                 Center(
                                                                   child: isLoading
                                                                       ? LoadingAnimationWidget.hexagonDots(
-                                                                          color: Colors
-                                                                              .black
-                                                                              .withOpacity(0.7),
+                                                                          color:
+                                                                              Colors.black.withOpacity(0.7),
                                                                           size:
                                                                               30,
                                                                         )
-                                                                      : Text("Google",
+                                                                      : Text("Guest Login",
                                                                           textAlign: TextAlign.left,
                                                                           style: GoogleFonts.comfortaa(
-                                                                            textStyle: const TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.w900,
-                                                                                color: Color.fromARGB(255, 37, 0, 0)),
+                                                                            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color.fromARGB(255, 37, 0, 0)),
                                                                           )),
                                                                 ),
                                                               ],
                                                             ),
                                                           )))),
                                             ),
-                                            SizedBox(
-                                              height: 40,
+                         */
+                                          // if (Platform.isIOS)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 40, vertical: 10),
+                                            child: SizedBox(
+                                              width: 250,
+                                              child: SignInWithAppleButton(
+                                                  onPressed: () {
+                                                signInApple();
+                                              }),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          // InkWell(
+                                          //   onTap: () {
+                                          //     apple();
+                                          //   },
+                                          //   child: Padding(
+                                          //       padding: const EdgeInsets
+                                          //               .symmetric(
+                                          //           horizontal: 40,
+                                          //           vertical: 0),
+                                          //       child: ClipRRect(
+                                          //           child: BackdropFilter(
+                                          //               filter:
+                                          //                   ImageFilter.blur(
+                                          //                       sigmaX: 15,
+                                          //                       sigmaY: 20),
+                                          //               child: Container(
+                                          //                 decoration:
+                                          //                     BoxDecoration(
+                                          //                   gradient:
+                                          //                       LinearGradient(
+                                          //                     colors: [
+                                          //                       Colors.white
+                                          //                           .withOpacity(
+                                          //                               0.8),
+                                          //                       Colors.white
+                                          //                           .withOpacity(
+                                          //                               0.7),
+                                          //                     ],
+                                          //                     begin:
+                                          //                         AlignmentDirectional
+                                          //                             .topStart,
+                                          //                     end: AlignmentDirectional
+                                          //                         .bottomEnd,
+                                          //                   ),
+                                          //                   borderRadius:
+                                          //                       const BorderRadius
+                                          //                               .all(
+                                          //                           Radius.circular(
+                                          //                               10)),
+                                          //                   border:
+                                          //                       Border.all(
+                                          //                     width: 1.5,
+                                          //                     color: Colors
+                                          //                         .white
+                                          //                         .withOpacity(
+                                          //                             0.5),
+                                          //                   ),
+                                          //                 ),
+                                          //                 height: 50,
+                                          //                 width: 250,
+                                          //                 child: Row(
+                                          //                   mainAxisAlignment:
+                                          //                       MainAxisAlignment
+                                          //                           .center,
+                                          //                   children: [
+                                          //                     const Icon(Icons
+                                          //                         .apple),
+                                          //                     const SizedBox(
+                                          //                       width: 30,
+                                          //                     ),
+                                          //                     Center(
+                                          //                       child: isLoading
+                                          //                           ? LoadingAnimationWidget.hexagonDots(
+                                          //                               color: Colors
+                                          //                                   .black
+                                          //                                   .withOpacity(0.7),
+                                          //                               size:
+                                          //                                   30,
+                                          //                             )
+                                          //                           : Text("Apple  ",
+                                          //                               textAlign: TextAlign.left,
+                                          //                               style: GoogleFonts.comfortaa(
+                                          //                                 textStyle: const TextStyle(
+                                          //                                     fontSize: 16,
+                                          //                                     fontWeight: FontWeight.w900,
+                                          //                                     color: Color.fromARGB(255, 37, 0, 0)),
+                                          //                               )),
+                                          //                     ),
+                                          //                   ],
+                                          //                 ),
+                                          //               )))),
+                                          // ),
+                                          // if (Platform.isIOS)
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              signInGoogle().then((value) {
+                                                print("Sign In Vayo");
+                                              });
+                                            },
+                                            child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 40,
+                                                        vertical: 10),
+                                                child: ClipRRect(
+                                                    child: BackdropFilter(
+                                                        filter:
+                                                            ImageFilter.blur(
+                                                                sigmaX: 15,
+                                                                sigmaY: 20),
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            gradient:
+                                                                LinearGradient(
+                                                              colors: [
+                                                                Colors.black,
+                                                                Colors.black,
+                                                              ],
+                                                              begin:
+                                                                  AlignmentDirectional
+                                                                      .topStart,
+                                                              end: AlignmentDirectional
+                                                                  .bottomEnd,
+                                                            ),
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            8)),
+                                                            border: Border.all(
+                                                              width: 1.5,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                            ),
+                                                          ),
+                                                          height: 45,
+                                                          width: 250,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Image.asset(
+                                                                "./assets/google.png",
+                                                                height: 25,
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Center(
+                                                                child: Text(
+                                                                  "Sign in with Google",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: GoogleFonts
+                                                                      .comfortaa(
+                                                                    textStyle: const TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w900,
+                                                                        color: Color.fromARGB(
+                                                                            255,
+                                                                            255,
+                                                                            255,
+                                                                            255)),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )))),
+                                          ),
+                                          SizedBox(
+                                            height: 40,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
+                              ),
+                            ],
+                          )),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
-        ),
+          if (isLoading)
+            Center(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
+                child: Container(
+                  color: Colors.white70,
+                  child: LoadingAnimationWidget.hexagonDots(
+                    color: Colors.black.withOpacity(0.7),
+                    size: 30,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

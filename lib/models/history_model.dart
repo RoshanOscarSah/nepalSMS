@@ -1,6 +1,3 @@
-
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HistoryModel {
@@ -10,15 +7,13 @@ class HistoryModel {
   Timestamp date;
   String userId;
 
-
   HistoryModel({
     required this.phone,
     required this.from,
     required this.message,
     required this.date,
     required this.userId,
-
-  }); 
+  });
 
   factory HistoryModel.fromJson(Map<String, dynamic> json) {
     return HistoryModel(
@@ -27,7 +22,6 @@ class HistoryModel {
       message: json["message"],
       date: json["date"],
       userId: json["userId"],
-
     );
   }
 }

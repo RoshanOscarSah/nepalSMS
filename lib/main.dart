@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'firebase_options.dart';
-import 'pages/splash_page.dart';
+import 'package:nepal_sms/firebase_options.dart';
+import 'package:nepal_sms/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +24,12 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+// TODO location permission app start huda magnu paryoo. magaeko chaina
+//TODO crashlytic and analytic
+// TODO sign in button lie eutai banaunae
+//TODO responsiveness while landscape
+//TODO firebase maa not null use garaeko hataunae
+//TODO account delete garda recent login chahincha
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
