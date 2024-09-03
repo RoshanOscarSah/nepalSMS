@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
+                                  backgroundColor: WidgetStatePropertyAll(
                                 Color.fromARGB(255, 255, 169, 48),
                               )),
                               onPressed: () {
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                               width: 135,
                               child: ElevatedButton(
                                 style: ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll(
+                                    backgroundColor: WidgetStatePropertyAll(
                                   Color.fromARGB(255, 255, 169, 48),
                                 )),
                                 onPressed: () async {
