@@ -20,7 +20,7 @@ version: 1.0.9+10
 
 environment:
   sdk: ">=2.19.2 <3.0.0"
-  flutter: '>=3.22.0'
+  flutter: ">=3.22.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,7 +39,6 @@ dependencies:
   http: ^0.13.5
   google_fonts: ^4.0.4
   loading_animation_widget: ^1.2.0+2
-  connectivity_plus: ^6.0.3
   get: ^4.6.6
   firebase_core: ^3.2.0
   firebase_auth: ^5.1.2
@@ -53,6 +52,12 @@ dependencies:
   permission_handler: ^10.0.0
   app_settings: ^4.1.8
   geolocator: ^12.0.0
+  geocoding: ^3.0.0
+  dio: ^5.7.0
+  flutter_dotenv: ^5.1.0
+  jwt_decoder: ^2.0.1
+  onesignal_flutter: ^5.2.4
+  connectivity_widget: ^1.6.0
   # geocoding: ^2.1.0
 
 dev_dependencies:

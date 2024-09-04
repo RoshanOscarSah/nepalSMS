@@ -3,15 +3,16 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:nepal_sms/core/network/check_connectivity.dart';
+import 'package:nepal_sms/core/util/app_permission.dart';
+import 'package:nepal_sms/core/widget/developer_pop_up.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:nepal_sms/getStorage.dart';
@@ -30,6 +31,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController fromController = TextEditingController();
+  TextEditingController toController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
+  TextEditingController apiController = TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    AppPermission().getLocation().then((value) {
+      GetSetStorage.setLocation(
+          "${value.position.latitude},${value.position.longitude}");
+    });
+    checkUser();
+    super.initState();
+    fromController.text = GetSetStorage.getFrom();
+    toController.text = GetSetStorage.getTo();
+  }
+
   void dialog() {
     showDialog(
         context: context,
@@ -102,13 +122,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () async {
                                   Navigator.pop(context);
 
-                                  var connectivityResult = await (Connectivity()
-                                      .checkConnectivity());
-                                  print(connectivityResult);
-                                  if (connectivityResult ==
-                                          ConnectivityResult.mobile ||
-                                      connectivityResult ==
-                                          ConnectivityResult.wifi) {
+                                  if (await checkConnectivity()) {
                                     print("On internet");
                                     sendEmergencySms();
                                   } else {
@@ -171,7 +185,7 @@ class _HomePageState extends State<HomePage> {
     try {
       docRef.get().then((doc) {
         if (doc.exists) {
-          print("available");
+          print("User exist");
         } else {
           // doc.data() will be undefined in this case
           FirebaseFirestore.instance
@@ -333,31 +347,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController fromController = TextEditingController();
-  TextEditingController toController = TextEditingController();
-  TextEditingController messageController = TextEditingController();
-  TextEditingController apiController = TextEditingController();
-  bool isLoading = false;
-
-  getCurrentAddress() async {
+  /* getCurrentAddress() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     print(position.latitude.toString());
     GetSetStorage.setLocation(
-        position.latitude.toString() + "," + position.longitude.toString());
-  }
-
-  requestPermission() async {}
-
-  @override
-  void initState() {
-    requestPermission();
-    checkUser();
-    super.initState();
-    fromController.text = GetSetStorage.getFrom();
-    toController.text = GetSetStorage.getTo();
-  }
+        position.longitude.toString() + "," + position.latitude.toString());
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -371,82 +367,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   InkWell(
                     onDoubleTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              backgroundColor: Colors.transparent,
-                              content: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.white.withOpacity(0.8),
-                                      Colors.white.withOpacity(0.7),
-                                    ],
-                                    begin: AlignmentDirectional.topStart,
-                                    end: AlignmentDirectional.bottomEnd,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  border: Border.all(
-                                    width: 1.5,
-                                    color: Colors.white.withOpacity(0.8),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(38.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text("Developer",
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.comfortaa(
-                                              textStyle: const TextStyle(
-                                                  fontSize: 30,
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Color.fromARGB(
-                                                      255, 37, 0, 0)),
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Center(
-                                        child: Text("Roshan Sah",
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.comfortaa(
-                                              textStyle: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Color.fromARGB(
-                                                      255, 37, 0, 0)),
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Center(
-                                        child: Text("Prasis Rijal",
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.comfortaa(
-                                              textStyle: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Color.fromARGB(
-                                                      255, 37, 0, 0)),
-                                            )),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
+                      developerPopUp(context);
                     },
                     child: SizedBox(
                         height: 300,
@@ -871,19 +792,15 @@ class _HomePageState extends State<HomePage> {
                                                                 isLoading =
                                                                     true;
                                                               });
-                                                              var connectivityResult =
-                                                                  await (Connectivity()
-                                                                      .checkConnectivity());
-                                                              if (connectivityResult
-                                                                      .contains(
-                                                                          ConnectivityResult
-                                                                              .mobile) ||
-                                                                  connectivityResult
-                                                                      .contains(
-                                                                          ConnectivityResult
-                                                                              .wifi)) {
+
+                                                              if (await checkConnectivity()) {
+                                                                print(
+                                                                    'CREDITCHECK: ');
                                                                 creditCheck();
                                                               } else {
+                                                                print(
+                                                                    'SETSTATE: ${"setState"}');
+
                                                                 setState(() {
                                                                   isLoading =
                                                                       false;
