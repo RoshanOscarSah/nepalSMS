@@ -33,6 +33,7 @@ class _CreditPageState extends State<CreditPage> {
   final String _productId1 = '50';
   final String _productId2 = '100';
   final String _productId3 = '200';
+  String _productPrice = '';
   bool _available = true;
   List<ProductDetails> _products = [];
   StreamSubscription<List<PurchaseDetails>>? _subscription;
@@ -165,18 +166,14 @@ class _CreditPageState extends State<CreditPage> {
   void _verifyPurchase(PurchaseDetails purchase) async {
     print('Verifying purchase with backend for product: ${purchase.productID}');
     try {
-      print(_products[0].title);
-      print(_products[0].price);
-      print(_products[0].currencyCode);
-      print(_products[0].currencySymbol);
-      print(_products[0].description);
-      print(_products[0].id);
-      print(_products[0].rawPrice);
-      print(_products[0].title);
-      addHistory(price: _products.first.price, no: purchase.productID);
+      if (_productPrice != '') {
+        addHistory(price: _productPrice, no: purchase.productID);
 
-      // Simulate verification success
-      print('Purchase verified successfully for ${purchase.productID}.');
+        // Simulate verification success
+        print('Purchase verified successfully for ${purchase.productID}.');
+      } else {
+        print('Empty _productPrice');
+      }
     } catch (e) {
       print('Error verifying purchase: $e');
     }
@@ -634,6 +631,11 @@ class _CreditPageState extends State<CreditPage> {
                                                                     InkWell(
                                                                       onTap:
                                                                           () {
+                                                                        setState(
+                                                                            () {
+                                                                          _productPrice =
+                                                                              _products[index].price;
+                                                                        });
                                                                         _buyProduct(
                                                                             _products[index]);
                                                                         // inAppPurchase(_userData.price, _userData.no_of_sms);
