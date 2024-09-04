@@ -12,11 +12,11 @@ import 'package:http/http.dart' as http;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/core/network/check_connectivity.dart';
 import 'package:nepal_sms/core/util/app_permission.dart';
+import 'package:nepal_sms/core/util/get_storage.dart';
 import 'package:nepal_sms/core/widget/developer_pop_up.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import 'package:nepal_sms/getStorage.dart';
-import 'package:nepal_sms/helper.dart';
+import 'package:nepal_sms/core/widget/helper.dart';
 import 'package:nepal_sms/models/firebaseModel.dart';
 import 'package:nepal_sms/pages/credit_page.dart';
 import 'package:nepal_sms/pages/user_page.dart';
@@ -36,18 +36,20 @@ class _HomePageState extends State<HomePage> {
   TextEditingController toController = TextEditingController();
   TextEditingController messageController = TextEditingController();
   TextEditingController apiController = TextEditingController();
+  GetSetStorage storage = GetSetStorage();
+
   bool isLoading = false;
 
   @override
   void initState() {
     AppPermission().getLocation().then((value) {
-      GetSetStorage.setLocation(
+      storage.setLocation(
           "${value.position.latitude},${value.position.longitude}");
     });
     checkUser();
     super.initState();
-    fromController.text = GetSetStorage.getFrom();
-    toController.text = GetSetStorage.getTo();
+    fromController.text = storage.getFrom();
+    toController.text = storage.getTo();
   }
 
   void dialog() {
@@ -127,21 +129,21 @@ class _HomePageState extends State<HomePage> {
                                     sendEmergencySms();
                                   } else {
                                     print("nowLocation");
-                                    print(GetSetStorage.getLocation());
+                                    print(storage.getLocation());
                                     print("nowLocation");
 
                                     String emergencyContact1 =
-                                        GetSetStorage.getEmergencyContact1();
+                                        storage.getEmergencyContact1();
                                     String emergencyContact2 =
-                                        GetSetStorage.getEmergencyContact2();
+                                        storage.getEmergencyContact2();
                                     var emergencyLocation = "";
                                     const emergencyMessage =
                                         "Emergency%20:%20I%20got%20in%20accident.%20Call%20for%20help.%20";
-                                    if (GetSetStorage.getLocation() == "") {
+                                    if (storage.getLocation() == "") {
                                       emergencyLocation = "";
                                     } else {
                                       emergencyLocation =
-                                          "Location%20:%20http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
+                                          "Location%20:%20http://www.google.com/maps/place/${storage.getLocation()}";
                                     }
 
                                     if (Platform.isAndroid) {
@@ -311,9 +313,9 @@ class _HomePageState extends State<HomePage> {
 
   sendEmergencySms() async {
     print("objffect");
-    var locationMessage = GetSetStorage.getLocation() == ""
+    var locationMessage = storage.getLocation() == ""
         ? ""
-        : "Location : http://www.google.com/maps/place/${GetSetStorage.getLocation()}";
+        : "Location : http://www.google.com/maps/place/${storage.getLocation()}";
     final response = await http.post(
       Uri.parse("https://cylinder.eachut.com/smsnepal/sendmessage"),
       headers: {
@@ -322,9 +324,9 @@ class _HomePageState extends State<HomePage> {
       },
       body: json.encode({
         'from': FirebaseAuth.instance.currentUser!.email.toString(),
-        'to': GetSetStorage.getEmergencyContact1() +
+        'to': storage.getEmergencyContact1() +
             "," +
-            GetSetStorage.getEmergencyContact2(),
+            storage.getEmergencyContact2(),
         'message':
             "Emergency : I got in accident. Call for help. $locationMessage"
       }),
@@ -778,10 +780,10 @@ class _HomePageState extends State<HomePage> {
                                                     onTap: isLoading
                                                         ? () {}
                                                         : () async {
-                                                            GetSetStorage.setFrom(
+                                                            storage.setFrom(
                                                                 fromController
                                                                     .text);
-                                                            GetSetStorage.setTo(
+                                                            storage.setTo(
                                                                 toController
                                                                     .text);
 
@@ -917,8 +919,8 @@ class _HomePageState extends State<HomePage> {
             top: 50,
             child: IconButton(
               onPressed: () async {
-                if (GetSetStorage.getEmergencyContact1() == "" ||
-                    GetSetStorage.getEmergencyContact2() == "") {
+                if (storage.getEmergencyContact1() == "" ||
+                    storage.getEmergencyContact2() == "") {
                   Get.to(() => EmergencyPage());
                 } else {
                   dialog();

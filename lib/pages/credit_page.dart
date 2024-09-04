@@ -11,7 +11,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:nepal_sms/models/firebaseModel.dart';
 import 'package:nepal_sms/models/purchasedModels.dart';
-import 'package:nepal_sms/swippableBox.dart';
+import 'package:nepal_sms/core/widget/swippableBox.dart';
 import 'package:nepal_sms/core/widget/developer_pop_up.dart';
 
 class CreditPage extends StatefulWidget {

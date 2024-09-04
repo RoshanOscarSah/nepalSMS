@@ -5,10 +5,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nepal_sms/core/util/app_permission.dart';
+import 'package:nepal_sms/core/util/get_storage.dart';
 import 'package:nepal_sms/core/widget/developer_pop_up.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:nepal_sms/getStorage.dart';
 
 class EmergencyPage extends StatefulWidget {
   const EmergencyPage({super.key});
@@ -22,10 +21,12 @@ class _EmergencyPageState extends State<EmergencyPage> {
   TextEditingController contact1Controller = TextEditingController();
   TextEditingController contact2Controller = TextEditingController();
   bool _location = true;
+  GetSetStorage storage = GetSetStorage();
+
   checkPermission() async {
     AppPermission().getLocation().then(
       (value) {
-        GetSetStorage.setLocation(
+        storage.setLocation(
             "${value.position.latitude},${value.position.longitude}");
         setState(() {});
       },
@@ -99,8 +100,8 @@ class _EmergencyPageState extends State<EmergencyPage> {
   @override
   void initState() {
     super.initState();
-    contact1Controller.text = GetSetStorage.getEmergencyContact1();
-    contact2Controller.text = GetSetStorage.getEmergencyContact2();
+    contact1Controller.text = storage.getEmergencyContact1();
+    contact2Controller.text = storage.getEmergencyContact2();
     checkPermission();
   }
 
@@ -341,20 +342,20 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                 ),
                                                 InkWell(
                                                     onTap: () async {
-                                                      GetSetStorage
+                                                      storage
                                                           .setEmergencyContact1(
                                                               "");
-                                                      GetSetStorage
+                                                      storage
                                                           .setEmergencyContact2(
                                                               "");
                                                       if (_formKey.currentState!
                                                           .validate()) {
                                                         print("object");
-                                                        GetSetStorage
+                                                        storage
                                                             .setEmergencyContact1(
                                                                 contact1Controller
                                                                     .text);
-                                                        GetSetStorage
+                                                        storage
                                                             .setEmergencyContact2(
                                                                 contact2Controller
                                                                     .text);
@@ -462,9 +463,9 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                               width: 150,
                                                               child: Center(
                                                                 child: Text(
-                                                                    GetSetStorage.getEmergencyContact1() ==
+                                                                    storage.getEmergencyContact1() ==
                                                                                 "" &&
-                                                                            GetSetStorage.getEmergencyContact2() ==
+                                                                            storage.getEmergencyContact2() ==
                                                                                 ""
                                                                         ? "Save"
                                                                         : "Update",
@@ -565,11 +566,11 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                     : InkWell(
                                                         onTap: () {
                                                           Uri url = Uri.parse(
-                                                              "http://www.google.com/maps/place/${GetSetStorage.getLocation()}");
+                                                              "http://www.google.com/maps/place/${storage.getLocation()}");
                                                           launchUrl(url);
                                                         },
                                                         child: Text(
-                                                          "Location : http://www.google.com/maps/place/${GetSetStorage.getLocation()}",
+                                                          "Location : http://www.google.com/maps/place/${storage.getLocation()}",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: GoogleFonts

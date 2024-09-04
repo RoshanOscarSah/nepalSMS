@@ -14,9 +14,11 @@ import '../util/global.dart' as globals;
 class DioInterceptor extends Interceptor {
   Future<void> tokenCheck() async {
     late final Dio dio;
+  GetSetStorage storage = GetSetStorage();
 
-    final String accessToken = GetSetStorage().getAccessToken();
-    final String refreshToken = GetSetStorage().getRefreshToken();
+
+    final String accessToken = storage.getAccessToken();
+    final String refreshToken = storage.getRefreshToken();
     if (accessToken.isNotEmpty && refreshToken.isNotEmpty) {
       bool accessTokenExpired = JwtDecoder.isExpired(accessToken);
       bool refreshTokenExpired = JwtDecoder.isExpired(refreshToken);
