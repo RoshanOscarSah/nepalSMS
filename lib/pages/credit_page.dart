@@ -111,7 +111,9 @@ class _CreditPageState extends State<CreditPage> {
     print('Products loaded: ${_products.length} products available.');
   }
 
-  void _buyProduct(ProductDetails productDetails) {
+  void _buyProduct(ProductDetails productDetails) async {
+    // Check for any pending purchases when initializing
+    await _inAppPurchase.restorePurchases();
     print('Attempting to buy product: ${productDetails.id}');
     final PurchaseParam purchaseParam =
         PurchaseParam(productDetails: productDetails);
@@ -137,6 +139,9 @@ class _CreditPageState extends State<CreditPage> {
         case PurchaseStatus.pending:
           print('Purchase is pending...');
           Get.snackbar("Pending", "Your purchase is pending.");
+          if (purchase.pendingCompletePurchase) {
+            _completePendingPurchase(purchase);
+          }
           break;
 
         case PurchaseStatus.error:
@@ -149,6 +154,9 @@ class _CreditPageState extends State<CreditPage> {
 
         default:
           print('Unhandled purchase status: ${purchase.status}');
+          if (purchase.pendingCompletePurchase) {
+            _completePendingPurchase(purchase);
+          }
           break;
       }
     }
