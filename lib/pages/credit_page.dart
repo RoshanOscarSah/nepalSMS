@@ -11,8 +11,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:nepal_sms/models/firebaseModel.dart';
 import 'package:nepal_sms/core/widget/swippableBox.dart';
 import 'package:nepal_sms/core/widget/developer_pop_up.dart';
-import 'package:nepal_sms/pages/widget/appstore_purchase_widget.dart';
-import 'package:nepal_sms/pages/widget/playstore_purchase_widget.dart';
+import 'package:nepal_sms/pages/widget/appstore_playstore_widget.dart';
 import 'package:nepal_sms/pages/widget/purchase_history_widget.dart';
 
 class CreditPage extends StatefulWidget {
@@ -339,94 +338,8 @@ class _CreditPageState extends State<CreditPage> {
                                                     print(index);
                                                   },
                                                   children: <Widget>[
-                                                    //!imp keep 2 widget only
                                                     //store
-                                                    Platform.isIOS ||
-                                                            Platform.isMacOS
-                                                        ? AppstorePurchaseWidget()
-                                                        : Platform.isAndroid
-                                                            ? PlaystorePurchaseWidget()
-                                                            : Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        20,
-                                                                    vertical:
-                                                                        5),
-                                                                child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    gradient:
-                                                                        LinearGradient(
-                                                                      colors: [
-                                                                        Colors
-                                                                            .white
-                                                                            .withOpacity(0.2),
-                                                                        Colors
-                                                                            .white
-                                                                            .withOpacity(0.4),
-                                                                      ],
-                                                                      begin: AlignmentDirectional
-                                                                          .topStart,
-                                                                      end: AlignmentDirectional
-                                                                          .bottomEnd,
-                                                                    ),
-                                                                    borderRadius:
-                                                                        const BorderRadius
-                                                                            .all(
-                                                                            Radius.circular(10)),
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      width:
-                                                                          1.5,
-                                                                      color: Colors
-                                                                          .white
-                                                                          .withOpacity(
-                                                                              0.5),
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            8.0),
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Icon(
-                                                                          Icons
-                                                                              .no_encryption_outlined,
-                                                                          color:
-                                                                              Colors.black,
-                                                                          size:
-                                                                              30,
-                                                                        ),
-                                                                        const SizedBox(
-                                                                          height:
-                                                                              10,
-                                                                        ),
-                                                                        Text(
-                                                                            'No Products Available. Please try again later.',
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            style: GoogleFonts.comfortaa(
-                                                                              textStyle: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: Colors.black,
-                                                                              ),
-                                                                            )),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
+                                                    AppstorePlaystoreWidget(),
                                                     //history
                                                     PurchaseHistoryWidget(),
                                                   ])),

@@ -28,7 +28,7 @@ class MyApp extends StatefulWidget {
 //TODO responsiveness while landscape
 //TODO firebase maa not null use garaeko hataunae
 //TODO account delete garda recent login chahincha
-//TODO inapppurchase android
+//TODO circle app icon
 
 class _MyAppState extends State<MyApp> {
   @override
