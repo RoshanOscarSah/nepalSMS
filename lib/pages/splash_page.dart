@@ -64,7 +64,7 @@ class _SplashPageState extends State<SplashPage> {
           ),
           child: Center(
               child: Image.asset(
-            "./assets/splash.png",
+            "./asset/splash.png",
           ))),
     );
   }

@@ -123,7 +123,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                         height: 300,
                         width: MediaQuery.of(context).size.width,
                         child: Image.asset(
-                          "./assets/sms.png",
+                          "./asset/sms.png",
                           fit: BoxFit.cover,
                         )),
                   ),
@@ -137,7 +137,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                           : 600,
                       width: MediaQuery.of(context).size.width,
                       child: Image.asset(
-                        "./assets/sms.png",
+                        "./asset/sms.png",
                         fit: BoxFit.cover,
                       )),
                   ClipRRect(

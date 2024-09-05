@@ -375,7 +375,7 @@ class _HomePageState extends State<HomePage> {
                         height: 300,
                         width: MediaQuery.of(context).size.width,
                         child: Image.asset(
-                          "./assets/sms.png",
+                          "./asset/sms.png",
                           fit: BoxFit.cover,
                         )),
                   ),
@@ -518,7 +518,7 @@ class _HomePageState extends State<HomePage> {
                           : 600,
                       width: MediaQuery.of(context).size.width,
                       child: Image.asset(
-                        "./assets/sms.png",
+                        "./asset/sms.png",
                         fit: BoxFit.cover,
                       )),
                   ClipRRect(

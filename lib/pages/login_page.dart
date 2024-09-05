@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 300,
                     width: MediaQuery.of(context).size.width,
                     child: Image.asset(
-                      "./assets/sms.png",
+                      "./asset/sms.png",
                       fit: BoxFit.cover,
                     )),
               ),
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                           : 500,
                       width: MediaQuery.of(context).size.width,
                       child: Image.asset(
-                        "./assets/sms.png",
+                        "./asset/sms.png",
                         fit: BoxFit.cover,
                       )),
                   ClipRRect(
@@ -525,7 +525,7 @@ class _LoginPageState extends State<LoginPage> {
                                                                     .center,
                                                             children: [
                                                               Image.asset(
-                                                                "./assets/google.png",
+                                                                "./asset/google.png",
                                                                 height: 25,
                                                               ),
                                                               const SizedBox(

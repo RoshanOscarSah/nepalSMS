@@ -282,7 +282,7 @@ class _AppstorePlaystoreWidgetState extends State<AppstorePlaystoreWidget> {
                       children: [
                         Icon(
                           Icons.no_encryption_outlined,
-                          color: Colors.white.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                           size: 30,
                         ),
                         const SizedBox(height: 10),
@@ -293,7 +293,7 @@ class _AppstorePlaystoreWidgetState extends State<AppstorePlaystoreWidget> {
                             textStyle: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w900,
-                              color: Colors.white.withOpacity(0.5),
+                              color: Colors.black.withOpacity(0.5),
                             ),
                           ),
                         ),

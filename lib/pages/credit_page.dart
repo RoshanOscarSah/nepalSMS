@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -71,7 +70,7 @@ class _CreditPageState extends State<CreditPage> {
                         height: 300,
                         width: MediaQuery.of(context).size.width,
                         child: Image.asset(
-                          "./assets/sms.png",
+                          "./asset/sms.png",
                           fit: BoxFit.cover,
                         )),
                   ),
@@ -187,7 +186,7 @@ class _CreditPageState extends State<CreditPage> {
                         : 600,
                     width: MediaQuery.of(context).size.width,
                     child: Image.asset(
-                      "./assets/sms.png",
+                      "./asset/sms.png",
                       fit: BoxFit.cover,
                     ),
                   ),
