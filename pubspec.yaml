@@ -48,6 +48,7 @@ dependencies:
   # esewa_flutter: ^1.1.2
   url_launcher: ^6.1.10
   in_app_purchase: ^3.2.0
+  # in_app_purchase_storekit: ^0.3.18+1
   flutter_sms: ^2.3.3
   permission_handler: ^10.0.0
   app_settings: ^4.1.8

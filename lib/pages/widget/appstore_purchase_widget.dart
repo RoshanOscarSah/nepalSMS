@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+// import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class AppstorePurchaseWidget extends StatefulWidget {
@@ -100,8 +101,9 @@ class _AppstorePurchaseWidgetState extends State<AppstorePurchaseWidget> {
     // Check for any pending purchases when initializing
     await _inAppPurchase.restorePurchases();
     print('Attempting to buy product: ${productDetails.id}');
-    final PurchaseParam purchaseParam =
-        PurchaseParam(productDetails: productDetails);
+    final PurchaseParam purchaseParam = PurchaseParam(
+      productDetails: productDetails,
+    );
     _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
   }
 
@@ -149,7 +151,7 @@ class _AppstorePurchaseWidgetState extends State<AppstorePurchaseWidget> {
 
   void _completePendingPurchase(PurchaseDetails purchase) {
     print('Completing pending purchase for ${purchase.productID}...');
-    _inAppPurchase.completePurchase(purchase).then((_) {
+    _inAppPurchase.completePurchase(purchase).then((value) {
       print('Purchase for ${purchase.productID} completed.');
     }).catchError((e) {
       print('Error completing purchase: $e');
@@ -171,6 +173,43 @@ class _AppstorePurchaseWidgetState extends State<AppstorePurchaseWidget> {
       print('Error verifying purchase: $e');
     }
   }
+
+  /* void _verifyPurchase(PurchaseDetails purchase) async {
+    print('Verifying purchase with backend for product: ${purchase.productID}');
+    try {
+      // Check platform (iOS-specific receipt fetching)
+      if (Platform.isIOS) {
+        print('Fetching receipt for iOS purchase verification...');
+        final receiptData = await _fetchIOSReceipt();
+        print('RECEIPTDATA: ${receiptData}');
+      } else {
+        // Handle other platforms if needed
+        addHistory(price: _productPrice, no: purchase.productID);
+      }
+    } catch (e) {
+      print('Error verifying purchase: $e');
+    }
+  }
+ */
+
+// Fetch the iOS receipt from the device
+  /*  Future<String?> _fetchIOSReceipt() async {
+    try {
+      final InAppPurchaseStoreKitPlatformAddition addition = InAppPurchase
+          .instance
+          .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+
+      // Request the receipt
+      final receiptData = await addition.refreshPurchaseVerificationData();
+      final receipt = receiptData?.localVerificationData;
+
+      print('iOS receipt fetched successfully: $receipt');
+      return receipt;
+    } on PlatformException catch (e) {
+      print('Error fetching iOS receipt: ${e.message}');
+      return null;
+    }
+  } */
 
   @override
   void dispose() {

@@ -33,6 +33,7 @@ class MyApp extends StatefulWidget {
 //TODO email to purchase ko sato inapppurchase
 //TODO purchase garaeko rs $ or aru tay app maa herinu paryoo
 //TODO website maa ni chalnu paryoo
+//TODO google signin not working in android
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
