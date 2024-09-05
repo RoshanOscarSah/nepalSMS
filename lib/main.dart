@@ -24,16 +24,12 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-// TODO location permission app start huda magnu paryoo. magaeko chaina
 //TODO crashlytic and analytic
-// TODO sign in button lie eutai banaunae
 //TODO responsiveness while landscape
 //TODO firebase maa not null use garaeko hataunae
 //TODO account delete garda recent login chahincha
-//TODO email to purchase ko sato inapppurchase
-//TODO purchase garaeko rs $ or aru tay app maa herinu paryoo
-//TODO website maa ni chalnu paryoo
-//TODO google signin not working in android
+//TODO inapppurchase android
+
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
