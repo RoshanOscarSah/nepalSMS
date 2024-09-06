@@ -550,6 +550,11 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 height: 40,
                               ),
+                              //! TODO remove this after crashlytic
+                             /*  TextButton(
+                                onPressed: () => throw Exception(),
+                                child: const Text("Throw Test Exception"),
+                              ), */
                               Center(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),

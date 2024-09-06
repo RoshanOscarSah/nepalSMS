@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -66,10 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
-    androidClientId:
-        '195266374056-73spqdc5464grn8k990dt581ig5ohtil.apps.googleusercontent.com',
-    iosClientId:
-        '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
+    androidClientId: '195266374056-73spqdc5464grn8k990dt581ig5ohtil.apps.googleusercontent.com',
+    iosClientId: '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
     iosBundleId: 'com.eachut.nepalsms',
   );
 
@@ -79,10 +74,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '195266374056',
     projectId: 'nepalsms-43400',
     storageBucket: 'nepalsms-43400.appspot.com',
-    androidClientId:
-        '195266374056-73spqdc5464grn8k990dt581ig5ohtil.apps.googleusercontent.com',
-    iosClientId:
-        '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
+    androidClientId: '195266374056-73spqdc5464grn8k990dt581ig5ohtil.apps.googleusercontent.com',
+    iosClientId: '195266374056-0obcp9jin9mia0bft0tam2g820f2m437.apps.googleusercontent.com',
     iosBundleId: 'com.eachut.nepalsms',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyC9nuyOWZ32xVoBPCmkS4CHzYn9KaVHH4o',
+    appId: '1:195266374056:web:e1de3f9d647b25c693159d',
+    messagingSenderId: '195266374056',
+    projectId: 'nepalsms-43400',
+    authDomain: 'nepalsms-43400.firebaseapp.com',
+    storageBucket: 'nepalsms-43400.appspot.com',
+    measurementId: 'G-0572BL7HVX',
+  );
+
 }

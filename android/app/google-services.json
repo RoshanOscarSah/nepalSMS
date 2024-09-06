@@ -38,6 +38,14 @@
           }
         },
         {
+          "client_id": "195266374056-p0sprdjjoanp2ul2484a1f4vsh4tsrs7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eachut.nepalsms",
+            "certificate_hash": "e4323b39dcf6a1733bb3845be18362bdb92c1140"
+          }
+        },
+        {
           "client_id": "195266374056-4ch6bm8tv82qvmq1en9bhv4ij7aighhp.apps.googleusercontent.com",
           "client_type": 3
         }

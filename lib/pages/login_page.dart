@@ -375,7 +375,7 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                          */
                                           // if (Platform.isIOS)
-                                          Padding(
+                                          /*  Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 40, vertical: 10),
                                             child: SizedBox(
@@ -385,89 +385,93 @@ class _LoginPageState extends State<LoginPage> {
                                                 signInApple();
                                               }),
                                             ),
+                                          ), */
+                                          InkWell(
+                                            onTap: () {
+                                              signInApple();
+                                            },
+                                            child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 40,
+                                                        vertical: 0),
+                                                child: ClipRRect(
+                                                    child: BackdropFilter(
+                                                        filter:
+                                                            ImageFilter.blur(
+                                                                sigmaX: 15,
+                                                                sigmaY: 20),
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            gradient:
+                                                                LinearGradient(
+                                                              colors: [
+                                                                Colors.black,
+                                                                Colors.black,
+                                                              ],
+                                                              begin:
+                                                                  AlignmentDirectional
+                                                                      .topStart,
+                                                              end: AlignmentDirectional
+                                                                  .bottomEnd,
+                                                            ),
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            8)),
+                                                            border: Border.all(
+                                                              width: 1.5,
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                            ),
+                                                          ),
+                                                          height: 45,
+                                                          width: 250,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              const Icon(
+                                                                Icons.apple,
+                                                                size: 25,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 5,
+                                                              ),
+                                                              Center(
+                                                                child: isLoading
+                                                                    ? LoadingAnimationWidget
+                                                                        .hexagonDots(
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.7),
+                                                                        size:
+                                                                            30,
+                                                                      )
+                                                                    : Text(
+                                                                        "Sign in with Apple ",
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .left,
+                                                                        style: GoogleFonts
+                                                                            .comfortaa(
+                                                                          textStyle: const TextStyle(
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w900,
+                                                                              color: Color.fromARGB(255, 255, 255, 255)),
+                                                                        )),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )))),
                                           ),
-                                          // InkWell(
-                                          //   onTap: () {
-                                          //     apple();
-                                          //   },
-                                          //   child: Padding(
-                                          //       padding: const EdgeInsets
-                                          //               .symmetric(
-                                          //           horizontal: 40,
-                                          //           vertical: 0),
-                                          //       child: ClipRRect(
-                                          //           child: BackdropFilter(
-                                          //               filter:
-                                          //                   ImageFilter.blur(
-                                          //                       sigmaX: 15,
-                                          //                       sigmaY: 20),
-                                          //               child: Container(
-                                          //                 decoration:
-                                          //                     BoxDecoration(
-                                          //                   gradient:
-                                          //                       LinearGradient(
-                                          //                     colors: [
-                                          //                       Colors.white
-                                          //                           .withOpacity(
-                                          //                               0.8),
-                                          //                       Colors.white
-                                          //                           .withOpacity(
-                                          //                               0.7),
-                                          //                     ],
-                                          //                     begin:
-                                          //                         AlignmentDirectional
-                                          //                             .topStart,
-                                          //                     end: AlignmentDirectional
-                                          //                         .bottomEnd,
-                                          //                   ),
-                                          //                   borderRadius:
-                                          //                       const BorderRadius
-                                          //                               .all(
-                                          //                           Radius.circular(
-                                          //                               10)),
-                                          //                   border:
-                                          //                       Border.all(
-                                          //                     width: 1.5,
-                                          //                     color: Colors
-                                          //                         .white
-                                          //                         .withOpacity(
-                                          //                             0.5),
-                                          //                   ),
-                                          //                 ),
-                                          //                 height: 50,
-                                          //                 width: 250,
-                                          //                 child: Row(
-                                          //                   mainAxisAlignment:
-                                          //                       MainAxisAlignment
-                                          //                           .center,
-                                          //                   children: [
-                                          //                     const Icon(Icons
-                                          //                         .apple),
-                                          //                     const SizedBox(
-                                          //                       width: 30,
-                                          //                     ),
-                                          //                     Center(
-                                          //                       child: isLoading
-                                          //                           ? LoadingAnimationWidget.hexagonDots(
-                                          //                               color: Colors
-                                          //                                   .black
-                                          //                                   .withOpacity(0.7),
-                                          //                               size:
-                                          //                                   30,
-                                          //                             )
-                                          //                           : Text("Apple  ",
-                                          //                               textAlign: TextAlign.left,
-                                          //                               style: GoogleFonts.comfortaa(
-                                          //                                 textStyle: const TextStyle(
-                                          //                                     fontSize: 16,
-                                          //                                     fontWeight: FontWeight.w900,
-                                          //                                     color: Color.fromARGB(255, 37, 0, 0)),
-                                          //                               )),
-                                          //                     ),
-                                          //                   ],
-                                          //                 ),
-                                          //               )))),
-                                          // ),
                                           // if (Platform.isIOS)
                                           SizedBox(
                                             height: 20,
@@ -532,26 +536,27 @@ class _LoginPageState extends State<LoginPage> {
                                                                 width: 5,
                                                               ),
                                                               Center(
-                                                                child: Text(
-                                                                  "Sign in with Google",
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style: GoogleFonts
-                                                                      .comfortaa(
-                                                                    textStyle: const TextStyle(
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w900,
-                                                                        color: Color.fromARGB(
-                                                                            255,
-                                                                            255,
-                                                                            255,
-                                                                            255)),
-                                                                  ),
-                                                                ),
+                                                                child: isLoading
+                                                                    ? LoadingAnimationWidget
+                                                                        .hexagonDots(
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.7),
+                                                                        size:
+                                                                            30,
+                                                                      )
+                                                                    : Text(
+                                                                        "Sign in with Google",
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        style: GoogleFonts
+                                                                            .comfortaa(
+                                                                          textStyle: const TextStyle(
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w900,
+                                                                              color: Color.fromARGB(255, 255, 255, 255)),
+                                                                        ),
+                                                                      ),
                                                               ),
                                                             ],
                                                           ),
