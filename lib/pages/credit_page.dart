@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,6 +38,7 @@ class _CreditPageState extends State<CreditPage> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("CreditPage");
     super.initState();
     head = widget.value.length < 1 ? head : widget.value;
     _pageController = PageController(
@@ -361,6 +363,7 @@ class _CreditPageState extends State<CreditPage> {
             top: 50,
             child: IconButton(
               onPressed: () {
+                FirebaseCrashlytics.instance.log("CreditPageOnTapIconButton");
                 Get.back();
               },
               icon: const Icon(

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -99,6 +100,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("EmergencyPage");
     super.initState();
     contact1Controller.text = storage.getEmergencyContact1();
     contact2Controller.text = storage.getEmergencyContact2();
@@ -342,6 +344,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                 ),
                                                 InkWell(
                                                     onTap: () async {
+                                                      FirebaseCrashlytics.instance.log("EmergencyPageOntapInkwell");
                                                       storage
                                                           .setEmergencyContact1(
                                                               "");
@@ -523,6 +526,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                 _location == false
                                                     ? InkWell(
                                                         onTap: () async {
+                                                          FirebaseCrashlytics.instance.log("EmergencyPageOnTapInkwell");
                                                           await Geolocator
                                                               .openAppSettings();
                                                         },
@@ -565,6 +569,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
                                                       )
                                                     : InkWell(
                                                         onTap: () {
+                                                          FirebaseCrashlytics.instance.log("EmergencyPageOnTapInkwell");
                                                           Uri url = Uri.parse(
                                                               "http://www.google.com/maps/place/${storage.getLocation()}");
                                                           launchUrl(url);
@@ -614,6 +619,7 @@ class _EmergencyPageState extends State<EmergencyPage> {
             top: 50,
             child: IconButton(
               onPressed: () {
+                FirebaseCrashlytics.instance.log("EmergencyPageOnTapIconButton");
                 Get.back();
               },
               icon: const Icon(

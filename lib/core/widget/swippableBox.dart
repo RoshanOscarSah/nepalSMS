@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -44,6 +45,7 @@ class SwippableBoxState extends State<SwippableBox> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
+              FirebaseCrashlytics.instance.log("SwippableBox");
               initialPosition = !initialPosition;
               var index = 0;
               if (!initialPosition) {

@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -162,6 +163,8 @@ class _UserPageState extends State<UserPage> {
                   children: [
                     InkWell(
                       onTap: () async {
+                        FirebaseCrashlytics.instance
+                            .log("UserPageOnTapInkwell");
                         print(FirebaseAuth
                             .instance.currentUser!.providerData[0].providerId);
                         if (FirebaseAuth.instance.currentUser!.providerData[0]
@@ -185,6 +188,8 @@ class _UserPageState extends State<UserPage> {
                     ),
                     InkWell(
                       onTap: () async {
+                        FirebaseCrashlytics.instance
+                            .log("UserPageOnTapInkwell");
                         Navigator.pop(context);
                       },
                       child: ListTile(
@@ -281,6 +286,8 @@ class _UserPageState extends State<UserPage> {
                                       ),
                                       IconButton(
                                           onPressed: () {
+                                            FirebaseCrashlytics.instance.log(
+                                                "UserPageOnPressedIconButton");
                                             FirebaseAuth.instance.signOut();
                                             print("logout");
                                             Get.snackbar("Logout",
@@ -637,6 +644,7 @@ class _UserPageState extends State<UserPage> {
             top: 50,
             child: IconButton(
               onPressed: () {
+                FirebaseCrashlytics.instance.log("UserPageOnPressedIconButton");
                 Get.back();
               },
               icon: const Icon(
@@ -650,6 +658,7 @@ class _UserPageState extends State<UserPage> {
             top: 50,
             child: IconButton(
               onPressed: () {
+                FirebaseCrashlytics.instance.log("UserPageOnPressedIconButton");
                 Get.to(() => EmergencyPage());
               },
               icon: const Icon(
@@ -663,6 +672,7 @@ class _UserPageState extends State<UserPage> {
             top: 50,
             child: IconButton(
               onPressed: () {
+                FirebaseCrashlytics.instance.log("UserPageOnPressedIconButton");
                 print("User");
                 dialog(context);
               },

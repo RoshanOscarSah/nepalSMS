@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -18,8 +19,19 @@ void main() async {
   );
   await GetStorage.init();
 
-  // Pass all uncaught "fatal" errors from the framework to Crashlytics
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+// Pass all uncaught "fatal" errors from the framework to Crashlytics
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   runApp(const MyApp());
 }
@@ -31,7 +43,8 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-//TODO crashlytic and analytic
+//TODO crashlytic dsyms
+//TODO analytic in initstate of page, see how many people taps on purchase
 //TODO responsiveness while landscape
 //TODO firebase maa not null use garaeko hataunae
 //TODO account delete garda recent login chahincha

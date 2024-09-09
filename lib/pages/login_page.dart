@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -388,6 +389,8 @@ class _LoginPageState extends State<LoginPage> {
                                           ), */
                                           InkWell(
                                             onTap: () {
+                                              FirebaseCrashlytics.instance
+                                                  .log("LoginPageOnTapInkwell");
                                               signInApple();
                                             },
                                             child: Padding(
@@ -478,6 +481,8 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                           InkWell(
                                             onTap: () {
+                                              FirebaseCrashlytics.instance
+                                                  .log("HomePageOnTapInkwell");
                                               signInGoogle().then((value) {
                                                 print("Sign In Vayo");
                                               });
@@ -583,6 +588,7 @@ class _LoginPageState extends State<LoginPage> {
             Center(
               child: InkWell(
                 onTap: () {
+                  FirebaseCrashlytics.instance.log("HomePageOnTapInkwell");
                   setState(() {
                     isLoading = false;
                   });

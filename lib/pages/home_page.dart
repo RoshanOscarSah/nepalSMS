@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("HomePage");
     AppPermission().getLocation().then((value) {
       storage.setLocation(
           "${value.position.latitude},${value.position.longitude}");
@@ -104,6 +106,8 @@ class _HomePageState extends State<HomePage> {
                                 Color.fromARGB(255, 255, 169, 48),
                               )),
                               onPressed: () {
+                                FirebaseCrashlytics.instance
+                                    .log("HomePageOnPressedElevatedButton");
                                 Navigator.pop(context);
                               },
                               child: Icon(
@@ -122,6 +126,8 @@ class _HomePageState extends State<HomePage> {
                                   Color.fromARGB(255, 255, 169, 48),
                                 )),
                                 onPressed: () async {
+                                  FirebaseCrashlytics.instance
+                                      .log("HomePageOnPressedElevatedButton");
                                   Navigator.pop(context);
 
                                   if (await checkConnectivity()) {
@@ -406,6 +412,8 @@ class _HomePageState extends State<HomePage> {
                                 width: 150,
                                 child: InkWell(
                                   onTap: () {
+                                    FirebaseCrashlytics.instance
+                                        .log("HomePageOnTapInkwell");
                                     print("gift Shop");
                                     Get.to(() => CreditPage(
                                         pageControllerR: 0,
@@ -481,6 +489,10 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                     IconButton(
                                                         onPressed: () {
+                                                          FirebaseCrashlytics
+                                                              .instance
+                                                              .log(
+                                                                  "HomePageOnPressedIconButton");
                                                           print("gift Shop");
                                                           Get.to(() =>
                                                               CreditPage(
@@ -550,11 +562,6 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 height: 40,
                               ),
-                              //! TODO remove this after crashlytic
-                             /*  TextButton(
-                                onPressed: () => throw Exception(),
-                                child: const Text("Throw Test Exception"),
-                              ), */
                               Center(
                                   child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -785,6 +792,8 @@ class _HomePageState extends State<HomePage> {
                                                     onTap: isLoading
                                                         ? () {}
                                                         : () async {
+                                                          FirebaseCrashlytics.instance
+                                        .log("HomePageOnTapInkwell");
                                                             storage.setFrom(
                                                                 fromController
                                                                     .text);
@@ -909,6 +918,7 @@ class _HomePageState extends State<HomePage> {
             top: 50,
             child: IconButton(
               onPressed: () {
+                FirebaseCrashlytics.instance.log("HomePageOnPressedIconButton");
                 print("User");
                 // Get.to(() => Page());
                 Get.to(() => UserPage());
@@ -924,6 +934,7 @@ class _HomePageState extends State<HomePage> {
             top: 50,
             child: IconButton(
               onPressed: () async {
+                FirebaseCrashlytics.instance.log("HomePageOnPressedIconButton");
                 if (storage.getEmergencyContact1() == "" ||
                     storage.getEmergencyContact2() == "") {
                   Get.to(() => EmergencyPage());

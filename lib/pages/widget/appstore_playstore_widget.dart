@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,6 +30,7 @@ class _AppstorePlaystoreWidgetState extends State<AppstorePlaystoreWidget> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("AppstorePlayStorePage");
     _initializeInAppPurchase();
     super.initState();
   }
@@ -220,6 +222,8 @@ class _AppstorePlaystoreWidgetState extends State<AppstorePlaystoreWidget> {
                     ),
                     InkWell(
                       onTap: () {
+                        FirebaseCrashlytics.instance
+                            .log("PurchaseOnTapAppstorePlayStorePage");
                         setState(() {
                           _productPrice = _products[index].price;
                         });

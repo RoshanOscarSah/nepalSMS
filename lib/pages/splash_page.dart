@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:nepal_sms/pages/home_page.dart';
@@ -42,6 +43,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
+    FirebaseCrashlytics.instance.log("SplashPage");
     super.initState();
     _navigate();
     // _guestlogout();
